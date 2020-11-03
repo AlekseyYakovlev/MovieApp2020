@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Android Academy 2020</string>
+    <string name="hello_world">Hello wold!</string>
+    <string name="hello_land_world" translatable="false">Hello land world!</string>
+    <string name="second_activity_text" translatable="false">\"These values were passed from previous screen: transmittedString: %s, transmittedInt: %d, transmittedBoolean: %b\"</string>
 </resources>
