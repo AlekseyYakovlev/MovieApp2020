@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Android Academy 2020</string>
-    <string name="hello_world">Hello wold!</string>
-    <string name="hello_land_world" translatable="false">Hello land world!</string>
-    <string name="second_activity_text" translatable="false">\"These values were passed from previous screen: transmittedString: %s, transmittedInt: %d, transmittedBoolean: %b\"</string>
+    <string name="back">Back</string>
+    <string name="temp_storyline_text" translatable="false">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos"' actions and restore balance to the universe.</string>
+    <string name="movie_details__cast">Cast</string>
+    <string name="movie_details__storyline">Storyline</string>
 </resources>
