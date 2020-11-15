@@ -7,7 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/background">
 
         <ImageView
             android:id="@+id/iv_poster"
@@ -74,7 +75,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_16"
             android:layout_marginEnd="@dimen/space_16"
-            android:background="#00000000"
             android:text="Avengers: End\u00A0Game"
             app:layout_constraintBottom_toBottomOf="@+id/iv_poster"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +88,7 @@
             android:layout_marginStart="@dimen/space_16"
             android:layout_marginTop="4dp"
             android:text="Action, Adventure, Fantasy"
-            android:textColor="#FF3466"
+            android:textColor="@color/pink"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -101,7 +101,7 @@
             android:numStars="5"
             android:progressBackgroundTint="@color/grey"
             android:progressDrawable="@drawable/ratingbar_svg_selector"
-            android:progressTint="#FF3466"
+            android:progressTint="@color/pink"
             android:rating="3"
             android:secondaryProgressTint="@color/grey"
             app:drawableHeight="12dp"

@@ -1,11 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.AndroidAcademy2020" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-<!--        <item name="windowNoTitle">true</item>-->
-<!--        <item name="windowActionBar">false</item>-->
 
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
-<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+        <item name="background">@color/dark_grey</item>
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
@@ -15,9 +12,6 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
-        <!-- Customize your theme here. -->
-        <item name="android:background">@color/dark_background</item>
+
     </style>
 </resources>
