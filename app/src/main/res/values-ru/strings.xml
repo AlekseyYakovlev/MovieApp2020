@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Android Academy 2020</string>
-    <string name="hello_world">Привет мир!</string>
+    <string name="back">Назад</string>
+    <string name="movie_details__cast">В главных ролях</string>
+    <string name="movie_details__storyline">Обзор</string>
 </resources>
