@@ -8,10 +8,8 @@ import ru.spb.yakovlev.androidacademy2020.ui.movie_details.MovieDetailsFragment
 import ru.spb.yakovlev.androidacademy2020.ui.movies_list.MoviesListFragment
 
 class RootActivity : AppCompatActivity() {
-    private val fragmentManager = supportFragmentManager
-
     private val clickListener = {
-        fragmentManager.commit {
+        supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.root_container, MovieDetailsFragment())
             addToBackStack(null)
@@ -28,7 +26,7 @@ class RootActivity : AppCompatActivity() {
     private fun setupNavigation(isInitial: Boolean) {
         if (isInitial) {
             val moviesListFragment = MoviesListFragment().also { it.clickListener = clickListener }
-            fragmentManager.commit {
+            supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(
                     R.id.root_container,
@@ -36,7 +34,7 @@ class RootActivity : AppCompatActivity() {
                     MOVIES_LIST_FRAGMENT
                 )
             }
-        } else (fragmentManager.findFragmentByTag(MOVIES_LIST_FRAGMENT) as? MoviesListFragment)?.let {
+        } else (supportFragmentManager.findFragmentByTag(MOVIES_LIST_FRAGMENT) as? MoviesListFragment)?.let {
             it.clickListener = clickListener
         }
     }
