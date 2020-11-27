@@ -26,17 +26,22 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation(isInitial: Boolean) {
-        MoviesListFragment.clickListener2 = clickListener
-        val moviesListFragment = MoviesListFragment()
-
         if (isInitial) {
+            val moviesListFragment = MoviesListFragment().also { it.clickListener = clickListener }
             fragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(
                     R.id.root_container,
-                    moviesListFragment
+                    moviesListFragment,
+                    MOVIES_LIST_FRAGMENT
                 )
             }
+        } else (fragmentManager.findFragmentByTag(MOVIES_LIST_FRAGMENT) as? MoviesListFragment)?.let {
+            it.clickListener = clickListener
         }
+    }
+
+    companion object {
+        const val MOVIES_LIST_FRAGMENT = "MOVIES_LIST_FRAGMENT"
     }
 }

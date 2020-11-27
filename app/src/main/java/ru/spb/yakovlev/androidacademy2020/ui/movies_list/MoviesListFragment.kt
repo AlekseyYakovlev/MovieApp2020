@@ -25,8 +25,6 @@ class MoviesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        clickListener = clickListener2
-
         binding.card1.root.setOnClickListener {
             clickListener?.invoke()
         }
@@ -35,10 +33,6 @@ class MoviesListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        var clickListener2: (() -> Unit)? = null
     }
 }
 
