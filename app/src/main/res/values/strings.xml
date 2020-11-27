@@ -4,4 +4,9 @@
     <string name="temp_storyline_text" translatable="false">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos"' actions and restore balance to the universe.</string>
     <string name="movie_details__cast">Cast</string>
     <string name="movie_details__storyline">Storyline</string>
+
+    <plurals name="movie_details__reviews">
+        <item quantity="one">%d review</item>
+        <item quantity="other">%d reviews</item>
+    </plurals>
 </resources>

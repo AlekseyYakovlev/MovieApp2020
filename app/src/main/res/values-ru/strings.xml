@@ -3,5 +3,11 @@
     <string name="app_name">Android Academy 2020</string>
     <string name="back">Назад</string>
     <string name="movie_details__cast">В главных ролях</string>
-    <string name="movie_details__storyline">Обзор</string>
+    <string name="movie_details__storyline">Сюжет</string>
+
+    <plurals name="movie_details__reviews">
+        <item quantity="one">%d рецензия</item>
+        <item quantity="few">%d рецензии</item>
+        <item quantity="many">%d рецензий</item>
+    </plurals>
 </resources>
