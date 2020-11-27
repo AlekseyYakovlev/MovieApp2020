@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="space_16">16dp</dimen>
+    <dimen name="spacing_2dp">2dp</dimen>
+    <dimen name="spacing_4dp">4dp</dimen>
+    <dimen name="spacing_6dp">6dp</dimen>
+    <dimen name="spacing_8dp">8dp</dimen>
+    <dimen name="spacing_12dp">12dp</dimen>
+    <dimen name="spacing_16dp">16dp</dimen>
+    <dimen name="spacing_18dp">18dp</dimen>
+    <dimen name="spacing_20dp">20dp</dimen>
+    <dimen name="spacing_24dp">24dp</dimen>
+    <dimen name="spacing_56dp">56dp</dimen>
+
+    <dimen name="like_width">16dp</dimen>
+    <dimen name="like_height">14dp</dimen>
+
+    <dimen name="pg_width">24dp</dimen>
+    <dimen name="pg_height">24dp</dimen>
+
+    <dimen name="movie_details_poster_height">298dp</dimen>
 </resources>

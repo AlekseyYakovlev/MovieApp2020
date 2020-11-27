@@ -12,4 +12,9 @@
     <color name="pink">#FF3466</color>
     <color name="translucent">#00000000</color>
 
+    <color name="scarpa_flow">#565665</color>
+    <color name="alto">#D8D8D8</color>
+    <color name="shadow_color">#80000000</color>
+    <color name="gallery">#ECECEC</color>
+
 </resources>
