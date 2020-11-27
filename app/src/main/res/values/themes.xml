@@ -126,4 +126,39 @@
         <item name="cornerSize">4dp</item>
     </style>
 
+    <!--    Movie Item   -->
+
+    <style name="CardView.MovieItemPoster" parent="">
+        <item name="android:elevation">24dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="strokeColor">@color/grey</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+
+    <style name="ImageView.MovieItemPoster" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="TextView.MovieItem.Title" parent="TextView.Subtitle" />
+
+    <style name="TextView.MovieItem.Tags" parent="TextView.Tags">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="TextView.MovieItem.Review" parent="TextView.TextBold">
+        <item name="android:textSize">8sp</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextView.MovieItem.Timing" parent="TextView.TextBold">
+        <item name="android:textSize">8sp</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+        <item name="android:textColor">@color/scarpa_flow</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 </resources>

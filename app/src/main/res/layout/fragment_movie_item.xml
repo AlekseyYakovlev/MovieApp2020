@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CardView.MovieItemPoster"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/movie_item_drawable">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/spacing_8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/spacing_8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/spacing_8dp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/gl_poster_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/spacing_8dp"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="space_above_header" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/spacing_8dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_poster"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/spacing_2dp"
+            android:layout_marginTop="@dimen/spacing_2dp"
+            android:layout_marginEnd="@dimen/spacing_2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pic_movie_item"
+            app:layout_constraintBottom_toTopOf="@id/gl_poster_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ImageView.MovieItemPoster" />
+
+        <ImageView
+            android:id="@+id/iv_mask"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/spacing_2dp"
+            android:layout_marginTop="@dimen/spacing_2dp"
+            android:layout_marginEnd="@dimen/spacing_2dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@id/gl_poster_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_mask"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_pg"
+            style="@style/TextView.PG"
+            android:text="13+"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toTopOf="@id/gl_top" />
+
+        <ru.spb.yakovlev.androidacademy2020.ui.custom.CheckableImageView
+            android:id="@+id/iv_like"
+            style="@style/ImageView.Like"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pg"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintTop_toTopOf="@+id/tv_pg" />
+
+        <ru.spb.yakovlev.androidacademy2020.ui.custom.RatingBarSvg
+            android:id="@+id/ratingBar"
+            style="@style/RatingBarSvg"
+            android:rating="4"
+            app:drawableHeight="8dp"
+            app:drawableWidth="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_review"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toTopOf="@+id/tv_review" />
+
+        <TextView
+            android:id="@+id/tv_review"
+            style="@style/TextView.MovieItem.Review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_6dp"
+            android:layout_marginBottom="@dimen/spacing_8dp"
+            android:text="125 reviews"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_poster"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar" />
+
+        <TextView
+            android:id="@+id/tv_tags"
+            style="@style/TextView.MovieItem.Tags"
+            android:layout_marginBottom="@dimen/spacing_2dp"
+            android:text="Action, Adventure, Fantasy"
+            app:layout_constraintBottom_toTopOf="@+id/tv_review"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start" />
+
+        <Space
+            android:id="@+id/space_above_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_8dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_header"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start" />
+
+        <TextView
+            android:id="@+id/tv_header"
+            style="@style/TextView.MovieItem.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Avengers: End\u00A0Game"
+            app:layout_constraintBottom_toTopOf="@+id/tv_timing"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start" />
+
+        <TextView
+            android:id="@+id/tv_timing"
+            style="@style/TextView.MovieItem.Timing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="137 min"
+            app:layout_constraintBottom_toBottomOf="@id/gl_bottom"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
