@@ -45,7 +45,23 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("androidx.fragment:fragment-ktx:1.2.5")
+
+    // Activity KTX
+    implementation ("androidx.activity:activity-ktx:1.2.0-beta01")
+
+    // Fragment KTX
+    implementation ("androidx.fragment:fragment-ktx:1.3.0-beta01")
+
+    // Lifecycle, ViewModel and LiveData
+    val lifecycleVersion = "2.3.0-beta01"
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation ("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+
+    // Coroutines
+    val coroutinesVersion = "1.4.1"
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
     // Testing
     testImplementation("junit:junit:4.13.1")
