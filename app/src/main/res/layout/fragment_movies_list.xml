@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/background">
 
     <ImageView
@@ -26,13 +27,25 @@
         app:layout_constraintStart_toEndOf="@+id/iv_aim"
         app:layout_constraintTop_toTopOf="@+id/iv_aim" />
 
-    <include
-        android:id="@+id/card1"
-        layout="@layout/fragment_movie_item"
-        android:layout_width="170dp"
-        android:layout_height="296dp"
+<!--    <include-->
+<!--        android:id="@+id/card1"-->
+<!--        layout="@layout/fragment_movie_item"-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="@dimen/spacing_12dp"-->
+<!--        android:layout_marginTop="102dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_movies_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/spacing_12dp"
         android:layout_marginTop="102dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/fragment_movie_item"
+        tools:itemCount="10"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

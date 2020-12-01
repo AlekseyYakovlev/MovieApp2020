@@ -10,6 +10,12 @@ import ru.spb.yakovlev.androidacademy2020.ui.movies_list.MoviesListFragment
 class RootActivity : AppCompatActivity() {
     private val clickListener = {
         supportFragmentManager.commit {
+            setCustomAnimations(
+                R.anim.zoom_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out,
+            )
             setReorderingAllowed(true)
             replace(R.id.root_container, MovieDetailsFragment())
             addToBackStack(null)
