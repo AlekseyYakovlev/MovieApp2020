@@ -47,7 +47,7 @@ class MoviesListRVAdapter(
             oldList[oldItemPosition].id == newList[newItemPosition].id
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition] === newList[newItemPosition]
+            oldList[oldItemPosition] == newList[newItemPosition]
     }
 }
 
@@ -56,7 +56,7 @@ class MovieVH(
     private val binding: FragmentMovieItemBinding,
     private val bindVH: (FragmentMovieItemBinding, MovieItemData) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
-    fun bind(movieItemData: MovieItemData) {
-        bindVH(binding, movieItemData)
+    fun bind(itemData: MovieItemData) {
+        bindVH(binding, itemData)
     }
 }
