@@ -4,6 +4,7 @@
     <string name="back">Назад</string>
     <string name="movie_details__cast">В главных ролях</string>
     <string name="movie_details__storyline">Сюжет</string>
+    <string name="minutes">%d мин.</string>
 
     <plurals name="movie_details__reviews">
         <item quantity="one">%d рецензия</item>

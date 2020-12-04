@@ -17,5 +17,9 @@
     <dimen name="pg_width">24dp</dimen>
     <dimen name="pg_height">24dp</dimen>
 
-    <dimen name="movie_details_poster_height">298dp</dimen>
+    <dimen name="movie_details__poster_height">298dp</dimen>
+
+    <dimen name="movie_details__actor_pic_corner_radius">4dp</dimen>
+    <dimen name="movie_list_items__poster_corner_radius">6dp</dimen>
+
 </resources>
