@@ -1,54 +1,104 @@
 package ru.spb.yakovlev.androidacademy2020.ui.movie_details
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
+import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.metadata
+import coil.transform.RoundedCornersTransformation
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
 import ru.spb.yakovlev.androidacademy2020.R
+import ru.spb.yakovlev.androidacademy2020.databinding.FragmentActorItemBinding
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMovieDetailsBinding
+import ru.spb.yakovlev.androidacademy2020.model.ActorItemData
+import ru.spb.yakovlev.androidacademy2020.model.DataState
+import ru.spb.yakovlev.androidacademy2020.model.MovieDetailsData
+import ru.spb.yakovlev.androidacademy2020.ui.RootActivity
+import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
+import ru.spb.yakovlev.androidacademy2020.viewmodels.MovieDetailsViewModel
 
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
-    private var _binding: FragmentMovieDetailsBinding? = null
-    private val binding get() = _binding!!
+    private val viewModel: MovieDetailsViewModel by viewModels()
+    private val vb by viewBinding(FragmentMovieDetailsBinding::bind)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-        return binding.root
+    private val bindVH: (FragmentActorItemBinding, ActorItemData) -> Unit = { item, data ->
+        with(item) {
+            ivPhoto.load(data.photo) {
+                placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
+            }
+            tvName.text = data.name
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         setupViews()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun setupViews() {
-        binding.btnBack.setOnClickListener {
+        val movieId = arguments?.getInt(RootActivity.MOVIE_ID, 0) ?: 0
+        viewModel.setMovieId(movieId)
+
+        vb.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+        val rvAdapter = ActorsListRVAdapter(bindVH)
+        vb.rvActorsList.apply {
+            layoutManager =
+                LinearLayoutManager(vb.rvActorsList.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = rvAdapter
+        }
 
-        // This coroutine is here for demonstration purposes
-        // and should be deleted after adding a data source
-        lifecycleScope.launchWhenResumed {
-            (0..1000).forEach { i ->
-                delay(500L)
-                binding.ratingBar.rating = (i % 11) / 2f
-                binding.tvReview.text =
-                    resources.getQuantityString(R.plurals.movie_details__reviews, i, i)
+        lifecycleScope.launchWhenStarted{
+            viewModel.movieDetailsState.collect {
+                when (it) {
+                    is DataState.Empty -> {
+                    }
+                    is DataState.Loading -> {
+
+                    }
+                    is DataState.Success<MovieDetailsData> -> {
+                        with(it.data){
+                            vb.ivPoster.load(poster2)
+                            vb.tvPg.text = pg
+                            vb.ivLike.apply{
+                                isChecked = isLike
+                                setOnClickListener { viewModel.handleLike(movieId, !isLike) }
+                            }
+                            vb.tvTitle.text=title
+                            vb.tvTags.text=tags
+                            vb.ratingBar.rating=rating
+                            vb.tvReview.text=resources.getQuantityString(
+                                R.plurals.movie_details__reviews,
+                                reviewsCount,
+                                reviewsCount
+                            )
+                            vb.tvStorylineText.text=storyLine
+
+                            rvAdapter.updateData(actorItemsData)
+                        }
+
+
+                    }
+                    is DataState.Error -> {
+                        Snackbar.make(vb.root, it.errorMessage, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+
+
+
+
             }
         }
+
     }
 
 
