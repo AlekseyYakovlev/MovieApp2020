@@ -43,13 +43,13 @@ class MoviesListViewModel : ViewModel() {
                 delay(30L)
             }
             delay(500L)
-            _moviesListState.value = DataState.Success(MovieListDummyRepo.movieItemList.take(4))
+            _moviesListState.value = DataState.Success(MovieListDummyRepo.getMovieItemList().take(4))
             (34..66).forEach {
                 _moviesListState.value = DataState.Loading(it)
                 delay(30L)
             }
             delay(500L)
-            _moviesListState.value = DataState.Success(MovieListDummyRepo.movieItemList.take(8))
+            _moviesListState.value = DataState.Success(MovieListDummyRepo.getMovieItemList().take(8))
             (67..100).forEach {
                 _moviesListState.value = DataState.Loading(it)
                 delay(30L)
