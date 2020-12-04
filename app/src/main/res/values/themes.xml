@@ -17,8 +17,16 @@
 
     <!--    Common  -->
 
+    <style name="ProgressBarStyle" parent="android:Widget.Material.ProgressBar.Large">
+        <item name="android:indeterminateTint">@color/pink</item>
+    </style>
+
     <style name="TextView" parent="Theme.AndroidAcademy2020">
         <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextView.ProgressBarText" parent="TextView">
+        <item name="android:textColor">@color/pink</item>
     </style>
 
     <style name="TextView.TextBold" parent="TextView">
@@ -135,13 +143,15 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
-
     <style name="ImageView.MovieItemPoster" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
     </style>
 
-    <style name="TextView.MovieItem.Title" parent="TextView.Subtitle" />
+    <style name="TextView.MovieItem.Title" parent="TextView.TextBold">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/gallery</item>
+    </style>
 
     <style name="TextView.MovieItem.Tags" parent="TextView.Tags">
         <item name="android:textSize">8sp</item>
