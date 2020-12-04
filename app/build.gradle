@@ -58,6 +58,8 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
 
+    // Coil
+    implementation("io.coil-kt:coil:1.1.0")
     // Coroutines
     val coroutinesVersion = "1.4.1"
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
