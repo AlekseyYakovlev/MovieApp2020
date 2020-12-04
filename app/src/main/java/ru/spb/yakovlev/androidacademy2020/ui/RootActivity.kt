@@ -8,16 +8,23 @@ import ru.spb.yakovlev.androidacademy2020.ui.movie_details.MovieDetailsFragment
 import ru.spb.yakovlev.androidacademy2020.ui.movies_list.MoviesListFragment
 
 class RootActivity : AppCompatActivity() {
-    private val clickListener = {
+    private val navigateToMovieDetails: (Int) -> Unit = { id ->
+        val args = Bundle().apply {
+            putInt(MOVIE_ID, id)
+        }
         supportFragmentManager.commit {
+            setReorderingAllowed(true)
             setCustomAnimations(
                 R.anim.zoom_in,
                 R.anim.fade_out,
                 R.anim.fade_in,
                 R.anim.slide_out,
             )
-            setReorderingAllowed(true)
-            replace(R.id.root_container, MovieDetailsFragment())
+            replace(
+                R.id.root_container,
+                MovieDetailsFragment::class.java,
+                args,
+            )
             addToBackStack(null)
         }
     }
@@ -31,7 +38,7 @@ class RootActivity : AppCompatActivity() {
 
     private fun setupNavigation(isInitial: Boolean) {
         if (isInitial) {
-            val moviesListFragment = MoviesListFragment().also { it.clickListener = clickListener }
+            val moviesListFragment = MoviesListFragment().also { it.clickListener = navigateToMovieDetails }
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(
@@ -41,11 +48,12 @@ class RootActivity : AppCompatActivity() {
                 )
             }
         } else (supportFragmentManager.findFragmentByTag(MOVIES_LIST_FRAGMENT) as? MoviesListFragment)?.let {
-            it.clickListener = clickListener
+            it.clickListener = navigateToMovieDetails
         }
     }
 
     companion object {
         const val MOVIES_LIST_FRAGMENT = "MOVIES_LIST_FRAGMENT"
+        const val MOVIE_ID = "MOVIE_ID"
     }
 }
