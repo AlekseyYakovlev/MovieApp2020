@@ -16,9 +16,9 @@ class RootActivity : AppCompatActivity() {
             setReorderingAllowed(true)
             setCustomAnimations(
                 R.anim.zoom_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
                 R.anim.slide_out,
+                R.anim.slide_in,
+                R.anim.zoom_out,
             )
             replace(
                 R.id.root_container,
@@ -38,7 +38,8 @@ class RootActivity : AppCompatActivity() {
 
     private fun setupNavigation(isInitial: Boolean) {
         if (isInitial) {
-            val moviesListFragment = MoviesListFragment().also { it.clickListener = navigateToMovieDetails }
+            val moviesListFragment =
+                MoviesListFragment().also { it.clickListener = navigateToMovieDetails }
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(

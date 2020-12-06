@@ -10,13 +10,15 @@
         android:id="@+id/rv_movies_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="102dp"
         android:layout_marginHorizontal="@dimen/spacing_8dp"
+        android:clipToPadding="false"
+        android:paddingTop="102dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="@integer/movies_list__number_of_columns"
         tools:listitem="@layout/fragment_movie_item" />
 
     <ImageView
@@ -27,7 +29,8 @@
         android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_target" />
+        app:srcCompat="@drawable/ic_target"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tv_page_title"
@@ -35,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_4dp"
-        android:text="Movies list"
+        android:text="@string/movies_list__movies_list_title"
         app:layout_constraintBottom_toBottomOf="@+id/iv_target"
         app:layout_constraintStart_toEndOf="@+id/iv_target"
         app:layout_constraintTop_toTopOf="@+id/iv_target" />
@@ -54,15 +57,14 @@
 
     <TextView
         android:id="@+id/tv_progressBar_text"
+        style="@style/TextView.ProgressBarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        style="@style/TextView.ProgressBarText"
         app:layout_constraintBottom_toBottomOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="@+id/progressBar"
         app:layout_constraintTop_toTopOf="@+id/progressBar"
-        tools:text="100%"
-        />
+        tools:text="100%" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

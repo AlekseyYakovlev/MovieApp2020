@@ -5,11 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import coil.metadata
-import coil.transform.CircleCropTransformation
-import coil.transform.RoundedCornersTransformation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import ru.spb.yakovlev.androidacademy2020.R
@@ -22,7 +19,6 @@ import ru.spb.yakovlev.androidacademy2020.viewmodels.MoviesListViewModel
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     var clickListener: ((Int) -> Unit)? = null
-
 
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
@@ -61,13 +57,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun setupViews() {
         val rvAdapter = MoviesListRVAdapter(bindVH)
-        vb.rvMoviesList.apply {
-            layoutManager = GridLayoutManager(
-                context,
-                resources.getInteger(R.integer.movies_list__number_of_columns)
-            )
-            adapter = rvAdapter
-        }
+        vb.rvMoviesList.apply { adapter = rvAdapter }
 
         lifecycleScope.launchWhenStarted {
             viewModel.moviesListState.collect {
