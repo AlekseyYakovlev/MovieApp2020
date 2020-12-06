@@ -6,6 +6,7 @@
     <string name="movie_details__storyline">Storyline</string>
     <string name="minutes">%d min</string>
     <string name="progress" translatable="false">%d%%</string>
+    <string name="movies_list__movies_list_title">Movies list</string>
 
     <plurals name="movie_details__reviews">
         <item quantity="one">%d review</item>

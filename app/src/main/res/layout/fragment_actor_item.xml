@@ -32,6 +32,6 @@
         app:layout_constraintStart_toStartOf="@id/iv_photo"
         app:layout_constraintTop_toBottomOf="@id/iv_photo"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="Chris Evans" />
+        tools:text="@tools:sample/full_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

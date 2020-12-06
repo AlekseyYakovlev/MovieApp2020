@@ -5,18 +5,18 @@
     android:shareInterpolator="true">
     <scale
         android:duration="@android:integer/config_longAnimTime"
-        android:fromXScale="0%"
-        android:fromYScale="0%"
-        android:toXScale="100%"
-        android:toYScale="100%" />
+        android:fromXScale="100%"
+        android:fromYScale="100%"
+        android:toXScale="0%"
+        android:toYScale="0%" />
     <translate
         android:duration="@android:integer/config_longAnimTime"
-        android:fromXDelta="50%"
-        android:fromYDelta="50%"
-        android:toXDelta="0%"
-        android:toYDelta="0%" />
+        android:fromXDelta="0%"
+        android:fromYDelta="0%"
+        android:toXDelta="50%"
+        android:toYDelta="50%" />
     <alpha
         android:duration="@android:integer/config_longAnimTime"
-        android:fromAlpha="0"
-        android:toAlpha="1" />
+        android:fromAlpha="1"
+        android:toAlpha="0" />
 </set>

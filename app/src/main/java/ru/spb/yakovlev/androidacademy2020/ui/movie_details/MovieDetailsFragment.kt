@@ -5,10 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.metadata
-import coil.transform.RoundedCornersTransformation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import ru.spb.yakovlev.androidacademy2020.R
@@ -38,8 +36,6 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         setupViews()
     }
 
@@ -51,55 +47,43 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         val rvAdapter = ActorsListRVAdapter(bindVH)
-        vb.rvActorsList.apply {
-            layoutManager =
-                LinearLayoutManager(vb.rvActorsList.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = rvAdapter
-        }
+        vb.rvActorsList.apply { adapter = rvAdapter }
 
-        lifecycleScope.launchWhenStarted{
+        lifecycleScope.launchWhenStarted {
             viewModel.movieDetailsState.collect {
                 when (it) {
                     is DataState.Empty -> {
                     }
                     is DataState.Loading -> {
-
                     }
                     is DataState.Success<MovieDetailsData> -> {
-                        with(it.data){
-                            vb.ivPoster.load(poster2)
+                        with(it.data) {
+                            vb.ivPoster.load(poster2){
+                                placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
+                            }
                             vb.tvPg.text = pg
-                            vb.ivLike.apply{
+                            vb.ivLike.apply {
                                 isChecked = isLike
                                 setOnClickListener { viewModel.handleLike(movieId, !isLike) }
                             }
-                            vb.tvTitle.text=title
-                            vb.tvTags.text=tags
-                            vb.ratingBar.rating=rating
-                            vb.tvReview.text=resources.getQuantityString(
+                            vb.tvTitle.text = title
+                            vb.tvTags.text = tags
+                            vb.ratingBar.rating = rating
+                            vb.tvReview.text = resources.getQuantityString(
                                 R.plurals.movie_details__reviews,
                                 reviewsCount,
                                 reviewsCount
                             )
-                            vb.tvStorylineText.text=storyLine
+                            vb.tvStorylineText.text = storyLine
 
                             rvAdapter.updateData(actorItemsData)
                         }
-
-
                     }
                     is DataState.Error -> {
                         Snackbar.make(vb.root, it.errorMessage, Snackbar.LENGTH_LONG).show()
                     }
                 }
-
-
-
-
             }
         }
-
     }
-
-
 }
