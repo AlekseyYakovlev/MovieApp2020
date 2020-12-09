@@ -57,7 +57,10 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun setupViews() {
         val rvAdapter = MoviesListRVAdapter(bindVH)
-        vb.rvMoviesList.apply { adapter = rvAdapter }
+        vb.rvMoviesList.apply {
+            adapter = rvAdapter
+            setHasFixedSize(true)
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.moviesListState.collect {
