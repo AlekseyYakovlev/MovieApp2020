@@ -47,7 +47,10 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         val rvAdapter = ActorsListRVAdapter(bindVH)
-        vb.rvActorsList.apply { adapter = rvAdapter }
+        vb.rvActorsList.apply {
+            adapter = rvAdapter
+            setHasFixedSize(true)
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.movieDetailsState.collect {
@@ -58,7 +61,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                     }
                     is DataState.Success<MovieDetailsData> -> {
                         with(it.data) {
-                            vb.ivPoster.load(poster2){
+                            vb.ivPoster.load(poster2) {
                                 placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
                             }
                             vb.tvPg.text = pg
