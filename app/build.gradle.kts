@@ -1,16 +1,18 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("plugin.serialization")
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion = "30.0.2"
+    compileSdkVersion((properties["android.compileSdk"] as String).toInt())
 
     defaultConfig {
+        minSdkVersion((properties["android.minSdk"] as String).toInt())
+        targetSdkVersion((properties["android.targetSdk"] as String).toInt())
+        buildToolsVersion = properties["android.buildToolsVersion"] as String
+
         applicationId = "ru.spb.yakovlev.androidacademy2020"
-        minSdkVersion(21)
-        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
 
@@ -18,9 +20,13 @@ android {
     }
 
     buildTypes {
-        getByName("debug") { }
-        getByName("release") {
+        getByName("debug") {
             isMinifyEnabled = false
+            isDebuggable = true
+        }
+        getByName("release") {
+            isMinifyEnabled = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -46,25 +52,31 @@ dependencies {
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
 
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+
     // Activity KTX
-    implementation ("androidx.activity:activity-ktx:1.2.0-beta01")
+    implementation("androidx.activity:activity-ktx:1.2.0-beta02")
 
     // Fragment KTX
-    implementation ("androidx.fragment:fragment-ktx:1.3.0-beta01")
+    implementation("androidx.fragment:fragment-ktx:1.3.0-beta02")
 
     // Lifecycle, ViewModel and LiveData
     val lifecycleVersion = "2.3.0-beta01"
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
 
     // Coroutines
     val coroutinesVersion = "1.4.1"
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
     // Coil
     implementation("io.coil-kt:coil:1.1.0")
+
+    //Log
+    implementation("com.jakewharton.timber:timber:4.7.1")
 
     // Testing
     testImplementation("junit:junit:4.13.1")
