@@ -55,11 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitXY"
+            android:src="@drawable/ic_mask"
             app:layout_constraintBottom_toBottomOf="@id/gl_poster_bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_mask"
             tools:ignore="ContentDescription" />
 
         <TextView
