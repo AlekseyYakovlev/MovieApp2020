@@ -56,13 +56,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     // Activity KTX
-    implementation("androidx.activity:activity-ktx:1.2.0-beta02")
+    implementation("androidx.activity:activity-ktx:1.2.0-rc01")
 
     // Fragment KTX
-    implementation("androidx.fragment:fragment-ktx:1.3.0-beta02")
+    implementation("androidx.fragment:fragment-ktx:1.3.0-rc01")
 
     // Lifecycle, ViewModel and LiveData
-    val lifecycleVersion = "2.3.0-beta01"
+    val lifecycleVersion = "2.3.0-rc01"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
