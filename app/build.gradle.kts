@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion((properties["android.compileSdk"] as String).toInt())
+    compileSdkVersion(30)
 
     defaultConfig {
-        minSdkVersion((properties["android.minSdk"] as String).toInt())
-        targetSdkVersion((properties["android.targetSdk"] as String).toInt())
-        buildToolsVersion = properties["android.buildToolsVersion"] as String
+        minSdkVersion(20)
+        targetSdkVersion(30)
+        buildToolsVersion = "30.0.3"
 
         applicationId = "ru.spb.yakovlev.androidacademy2020"
         versionCode = 1

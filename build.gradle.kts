@@ -1,12 +1,13 @@
 buildscript {
+    val kotlinVersion by extra("1.4.21")
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${properties["version.kotlin"]}")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:${properties["version.kotlin"]}")
-        classpath("com.android.tools.build:gradle:${properties["version.androidGradlePlugin"]}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
+        classpath("com.android.tools.build:gradle:4.1.1")
     }
 }
 
