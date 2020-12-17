@@ -2,12 +2,20 @@ package ru.spb.yakovlev.androidacademy2020.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.commit
 import ru.spb.yakovlev.androidacademy2020.R
+import ru.spb.yakovlev.androidacademy2020.databinding.ActivityRootBinding
 import ru.spb.yakovlev.androidacademy2020.ui.movie_details.MovieDetailsFragment
 import ru.spb.yakovlev.androidacademy2020.ui.movies_list.MoviesListFragment
+import ru.spb.yakovlev.androidacademy2020.ui.util.doOnApplyWindowInsets
+import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
 
-class RootActivity : AppCompatActivity() {
+class RootActivity : AppCompatActivity(R.layout.activity_root) {
+    private val vb by viewBinding(ActivityRootBinding::bind, R.id.root_container)
+
     private val navigateToMovieDetails: (Int) -> Unit = { id ->
         val args = Bundle().apply {
             putInt(ARG_TAG__MOVIE_ID, id)
@@ -34,6 +42,7 @@ class RootActivity : AppCompatActivity() {
         setContentView(R.layout.activity_root)
 
         setupNavigation(savedInstanceState == null)
+        handleLeftAndRightInsets()
     }
 
     private fun setupNavigation(isInitial: Boolean) {
@@ -50,6 +59,23 @@ class RootActivity : AppCompatActivity() {
             }
         } else (supportFragmentManager.findFragmentByTag(FRAGMENT_TAG__MOVIES_LIST) as? MoviesListFragment)?.let {
             it.clickListener = navigateToMovieDetails
+        }
+    }
+
+    private fun handleLeftAndRightInsets() {
+        vb.rootContainer.doOnApplyWindowInsets { view, insets, initialPadding ->
+            view.updatePadding(
+                left = initialPadding.left + insets.systemWindowInsetLeft,
+                right = initialPadding.right + insets.systemWindowInsetRight
+            )
+            WindowInsetsCompat.Builder(insets).setSystemWindowInsets(
+                Insets.of(
+                    0,
+                    insets.systemWindowInsetTop,
+                    0,
+                    insets.systemWindowInsetBottom
+                )
+            ).build()
         }
     }
 

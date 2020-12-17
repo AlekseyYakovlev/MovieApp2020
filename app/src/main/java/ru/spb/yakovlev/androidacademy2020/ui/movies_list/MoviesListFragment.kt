@@ -16,6 +16,8 @@ import ru.spb.yakovlev.androidacademy2020.extensions.roundRating
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieItemData
 import ru.spb.yakovlev.androidacademy2020.ui.base.BaseRVAdapter
+import ru.spb.yakovlev.androidacademy2020.ui.util.addSystemPadding
+import ru.spb.yakovlev.androidacademy2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
 import ru.spb.yakovlev.androidacademy2020.viewmodels.MoviesListViewModel
 
@@ -33,7 +35,10 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private fun setupViews() {
         val rvAdapter = setupRecyclerViewAdapter()
 
+        vb.tvPageTitle.addSystemTopPadding()
+
         vb.rvMoviesList.apply {
+            addSystemPadding()
             adapter = rvAdapter
             setHasFixedSize(true)
         }
