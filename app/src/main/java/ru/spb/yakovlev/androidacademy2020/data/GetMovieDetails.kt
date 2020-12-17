@@ -24,6 +24,13 @@ class GetMovieDetailsState(private val movieId: Int) {
         _state.value = DataState.Success(movie.toMovieMovieDetailsData(actors))
     }
 
+    fun handleLike(){
+        val movie = moviesRepo.getMovieById(movieId)
+        val actors = actorsRepo.getActorItemsById(movie.castIds)
+        _state.value = DataState.Success(movie.toMovieMovieDetailsData(actors))
+    }
+
+
     private fun MovieData.toMovieMovieDetailsData(actors: List<ActorItemData>) = MovieDetailsData(
         id = id,
         title = title,

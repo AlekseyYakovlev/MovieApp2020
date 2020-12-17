@@ -34,6 +34,6 @@ class MovieDetailsViewModel : ViewModel() {
 
     fun handleLike(movieId: Int, isLike: Boolean) {
         MovieListMokkRepo.updateMovieLike(movieId, isLike)
-
+        getMovieDetailsState.handleLike()
     }
 }
