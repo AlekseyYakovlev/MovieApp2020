@@ -107,6 +107,7 @@
             android:id="@+id/ratingBar"
             style="@style/RatingBarSvg"
             android:layout_marginStart="16dp"
+            android:isIndicator="true"
             app:drawableHeight="12dp"
             app:drawableWidth="13dp"
             app:innerPadding="4dp"

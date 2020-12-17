@@ -70,11 +70,11 @@
             android:layout_marginTop="@dimen/spacing_2dp"
             android:layout_marginEnd="@dimen/spacing_2dp"
             android:scaleType="fitXY"
+            android:src="@drawable/ic_mask"
             app:layout_constraintBottom_toTopOf="@id/gl_poster_bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_mask"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -94,6 +94,7 @@
         <ru.spb.yakovlev.androidacademy2020.ui.custom.RatingBarSvg
             android:id="@+id/ratingBar"
             style="@style/RatingBarSvg"
+            android:isIndicator="true"
             android:rating="4"
             app:drawableHeight="8dp"
             app:drawableWidth="8dp"
