@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.AndroidAcademy2020" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
         <item name="background">@color/dark_grey</item>
 
         <!-- Primary brand color. -->

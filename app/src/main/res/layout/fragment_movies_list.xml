@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movies_list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/background">
@@ -12,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/spacing_8dp"
         android:clipToPadding="false"
-        android:paddingTop="102dp"
+        android:paddingTop="@dimen/spacing_56dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,27 +22,20 @@
         app:spanCount="@integer/movies_list__number_of_columns"
         tools:listitem="@layout/fragment_movie_item" />
 
-    <ImageView
-        android:id="@+id/iv_target"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="@dimen/spacing_16dp"
-        android:layout_marginTop="45dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_target"
-        tools:ignore="ContentDescription" />
-
     <TextView
         android:id="@+id/tv_page_title"
         style="@style/TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_4dp"
+        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginTop="@dimen/spacing_20dp"
+        android:drawablePadding="@dimen/spacing_4dp"
+        android:gravity="center"
         android:text="@string/movies_list__movies_list_title"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_target"
-        app:layout_constraintStart_toEndOf="@+id/iv_target"
-        app:layout_constraintTop_toTopOf="@+id/iv_target" />
+        app:drawableStartCompat="@drawable/ic_target"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"

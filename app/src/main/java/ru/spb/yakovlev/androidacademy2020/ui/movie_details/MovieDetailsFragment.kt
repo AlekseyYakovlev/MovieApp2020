@@ -18,6 +18,7 @@ import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieDetailsData
 import ru.spb.yakovlev.androidacademy2020.ui.RootActivity
 import ru.spb.yakovlev.androidacademy2020.ui.base.BaseRVAdapter
+import ru.spb.yakovlev.androidacademy2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
 import ru.spb.yakovlev.androidacademy2020.viewmodels.MovieDetailsViewModel
 
@@ -35,6 +36,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     private fun setupViews() {
         val movieId = arguments?.getInt(RootActivity.ARG_TAG__MOVIE_ID, 0) ?: 0
         viewModel.setMovieId(movieId)
+
+        vb.movieDetailsRoot.addSystemPadding()
 
         vb.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
