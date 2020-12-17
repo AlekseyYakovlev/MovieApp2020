@@ -1,31 +1,39 @@
 package ru.spb.yakovlev.androidacademy2020.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ru.spb.yakovlev.androidacademy2020.data.MovieListDummyRepo
+import kotlinx.coroutines.launch
+import ru.spb.yakovlev.androidacademy2020.data.GetMovieDetailsState
+import ru.spb.yakovlev.androidacademy2020.data.MovieListMokkRepo
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieDetailsData
-import ru.spb.yakovlev.androidacademy2020.model.toMovieMovieDetailsData
 
 class MovieDetailsViewModel : ViewModel() {
-    private val _movieDetailsState = MutableStateFlow<DataState<MovieDetailsData>>(DataState.Empty)
-    val movieDetailsState: StateFlow<DataState<MovieDetailsData>> = _movieDetailsState
 
     private var movieId = 0
+    lateinit var getMovieDetailsState: GetMovieDetailsState
+
+    val movieDetailsState: StateFlow<DataState<MovieDetailsData>>
+        get() {
+            return when (movieId) {
+                0 -> MutableStateFlow(DataState.Empty)
+                else -> getMovieDetailsState.state
+            }
+        }
 
     fun setMovieId(id: Int) {
         movieId = id
-        _movieDetailsState.value = DataState.Loading(null)
-        _movieDetailsState.value = DataState.Success<MovieDetailsData>(
-            MovieListDummyRepo.getMovieById(movieId).toMovieMovieDetailsData()
-        )
+        getMovieDetailsState = GetMovieDetailsState(movieId)
+
+        viewModelScope.launch {
+            getMovieDetailsState.update()
+        }
     }
 
     fun handleLike(movieId: Int, isLike: Boolean) {
-        MovieListDummyRepo.updateMovieLike(movieId, isLike)
-        _movieDetailsState.value = DataState.Success<MovieDetailsData>(
-            MovieListDummyRepo.getMovieById(movieId).toMovieMovieDetailsData()
-        )
+        MovieListMokkRepo.updateMovieLike(movieId, isLike)
+
     }
 }

@@ -10,7 +10,7 @@ import ru.spb.yakovlev.androidacademy2020.ui.movies_list.MoviesListFragment
 class RootActivity : AppCompatActivity() {
     private val navigateToMovieDetails: (Int) -> Unit = { id ->
         val args = Bundle().apply {
-            putInt(MOVIE_ID, id)
+            putInt(ARG_TAG__MOVIE_ID, id)
         }
         supportFragmentManager.commit {
             setReorderingAllowed(true)
@@ -45,16 +45,16 @@ class RootActivity : AppCompatActivity() {
                 replace(
                     R.id.root_container,
                     moviesListFragment,
-                    MOVIES_LIST_FRAGMENT
+                    FRAGMENT_TAG__MOVIES_LIST
                 )
             }
-        } else (supportFragmentManager.findFragmentByTag(MOVIES_LIST_FRAGMENT) as? MoviesListFragment)?.let {
+        } else (supportFragmentManager.findFragmentByTag(FRAGMENT_TAG__MOVIES_LIST) as? MoviesListFragment)?.let {
             it.clickListener = navigateToMovieDetails
         }
     }
 
     companion object {
-        const val MOVIES_LIST_FRAGMENT = "MOVIES_LIST_FRAGMENT"
-        const val MOVIE_ID = "MOVIE_ID"
+        const val FRAGMENT_TAG__MOVIES_LIST = "MOVIES_LIST_FRAGMENT"
+        const val ARG_TAG__MOVIE_ID = "MOVIE_ID"
     }
 }
