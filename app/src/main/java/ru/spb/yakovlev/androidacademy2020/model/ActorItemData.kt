@@ -1,7 +1,9 @@
 package ru.spb.yakovlev.androidacademy2020.model
 
+import ru.spb.yakovlev.androidacademy2020.ui.base.RvItemData
+
 data class ActorItemData(
-    val id: Int = 0,
+    override val id: Int = 0,
     val name: String = "",
     val photo: String = "",
-)
+) : RvItemData

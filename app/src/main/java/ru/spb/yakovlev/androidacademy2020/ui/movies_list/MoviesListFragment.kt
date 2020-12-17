@@ -8,12 +8,13 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.metadata
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import ru.spb.yakovlev.androidacademy2020.R
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMoviesListBinding
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieItemData
+import ru.spb.yakovlev.androidacademy2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
 import ru.spb.yakovlev.androidacademy2020.viewmodels.MoviesListViewModel
 
@@ -23,47 +24,21 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
 
-    private val bindVH: (FragmentMovieItemBinding, MovieItemData) -> Unit = { item, data ->
-        with(item) {
-            ivPoster.load(data.poster) {
-                placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
-            }
-            tvPg.text = data.pg
-            ivLike.isChecked = data.isLike
-            ivLike.setOnClickListener { viewModel.handleLike(data.id, !data.isLike) }
-            ratingBar.rating = data.rating
-            tvReview.text =
-                resources.getQuantityString(
-                    R.plurals.movie_details__reviews,
-                    data.reviewsCount,
-                    data.reviewsCount
-                )
-            tvHeader.text = data.title
-            tvTags.text = data.tags
-            tvTiming.text = resources.getString(R.string.minutes, data.duration)
-            root.setOnClickListener { clickListener?.invoke(data.id) }
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.update()
-    }
-
     private fun setupViews() {
-        val rvAdapter = MoviesListRVAdapter(bindVH)
+        val rvAdapter = setupRecyclerViewAdapter()
+
         vb.rvMoviesList.apply {
             adapter = rvAdapter
             setHasFixedSize(true)
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.moviesListState.collect {
+            viewModel.moviesListState.collectLatest {
                 when (it) {
                     is DataState.Empty -> {
                     }
@@ -89,5 +64,37 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             }
         }
     }
+
+    private fun setupRecyclerViewAdapter() =
+        BaseRVAdapter<FragmentMovieItemBinding, MovieItemData>(
+            viewHolderInflater = { layoutInflater, parent, attachToParent ->
+                FragmentMovieItemBinding.inflate(layoutInflater, parent, attachToParent)
+            },
+            viewHolderBinder = { item, data ->
+                with(item) {
+                    ivPoster.load(data.poster) {
+                        placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
+                    }
+                    tvPg.text = data.minimumAge
+                    ivLike.isChecked = data.isLike
+                    ivLike.setOnClickListener { viewModel.handleLike(data.id, !data.isLike) }
+                    ratingBar.rating = data.ratings
+                    tvReview.text =
+                        resources.getQuantityString(
+                            R.plurals.movie_details__reviews,
+                            data.numberOfRatings,
+                            data.numberOfRatings
+                        )
+                    tvHeader.text = data.title
+                    tvTags.text = data.genre
+                    tvTiming.text = resources.getString(
+                        R.string.minutes,
+                        data.runtime
+                    )
+                    root.setOnClickListener { clickListener?.invoke(data.id) }
+                }
+            },
+        )
 }
+
 
