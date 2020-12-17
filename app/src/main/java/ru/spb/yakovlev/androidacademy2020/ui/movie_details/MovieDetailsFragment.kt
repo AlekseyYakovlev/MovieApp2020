@@ -16,6 +16,7 @@ import ru.spb.yakovlev.androidacademy2020.model.ActorItemData
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieDetailsData
 import ru.spb.yakovlev.androidacademy2020.ui.RootActivity
+import ru.spb.yakovlev.androidacademy2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.androidacademy2020.utils.viewbindingdelegate.viewBinding
 import ru.spb.yakovlev.androidacademy2020.viewmodels.MovieDetailsViewModel
 
@@ -24,15 +25,6 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     private val viewModel: MovieDetailsViewModel by viewModels()
     private val vb by viewBinding(FragmentMovieDetailsBinding::bind)
 
-    private val bindVH: (FragmentActorItemBinding, ActorItemData) -> Unit = { item, data ->
-        with(item) {
-            ivPhoto.load(data.photo) {
-                placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
-            }
-            tvName.text = data.name
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,13 +32,13 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     }
 
     private fun setupViews() {
-        val movieId = arguments?.getInt(RootActivity.MOVIE_ID, 0) ?: 0
+        val movieId = arguments?.getInt(RootActivity.ARG_TAG__MOVIE_ID, 0) ?: 0
         viewModel.setMovieId(movieId)
 
         vb.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        val rvAdapter = ActorsListRVAdapter(bindVH)
+        val rvAdapter = setupRecyclerViewAdapter()
         vb.rvActorsList.apply {
             adapter = rvAdapter
             setHasFixedSize(true)
@@ -56,30 +48,38 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             viewModel.movieDetailsState.collect {
                 when (it) {
                     is DataState.Empty -> {
+                        vb.tvMovieCast
                     }
                     is DataState.Loading -> {
                     }
                     is DataState.Success<MovieDetailsData> -> {
                         with(it.data) {
-                            vb.ivPoster.load(poster2) {
+                            vb.ivPoster.load(backdrop) {
                                 placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
                             }
-                            vb.tvPg.text = pg
+                            vb.tvPg.text = minimumAge
                             vb.ivLike.apply {
                                 isChecked = isLike
                                 setOnClickListener { viewModel.handleLike(movieId, !isLike) }
                             }
                             vb.tvTitle.text = title
-                            vb.tvTags.text = tags
-                            vb.ratingBar.rating = rating
+                            vb.tvTags.text = genre
+                            vb.ratingBar.rating = ratings
                             vb.tvReview.text = resources.getQuantityString(
                                 R.plurals.movie_details__reviews,
-                                reviewsCount,
-                                reviewsCount
+                                numberOfRatings,
+                                numberOfRatings
                             )
-                            vb.tvStorylineText.text = storyLine
+                            vb.tvStorylineText.text = overview
 
-                            rvAdapter.updateData(actorItemsData)
+                            if (actorItemsData.isNotEmpty()) {
+                                vb.tvMovieCast.visibility = View.VISIBLE
+                                vb.rvActorsList.visibility = View.VISIBLE
+                                rvAdapter.updateData(actorItemsData)
+                            } else {
+                                vb.tvMovieCast.visibility = View.GONE
+                                vb.rvActorsList.visibility = View.GONE
+                            }
                         }
                     }
                     is DataState.Error -> {
@@ -89,4 +89,19 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             }
         }
     }
+
+    private fun setupRecyclerViewAdapter() =
+        BaseRVAdapter<FragmentActorItemBinding, ActorItemData>(
+            viewHolderInflater = { layoutInflater, parent, attachToParent ->
+                FragmentActorItemBinding.inflate(layoutInflater, parent, attachToParent)
+            },
+            viewHolderBinder = { item, data ->
+                with(item) {
+                    ivPhoto.load(data.photo) {
+                        placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
+                    }
+                    tvName.text = data.name
+                }
+            },
+        )
 }

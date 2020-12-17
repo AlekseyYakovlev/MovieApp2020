@@ -1,13 +1,15 @@
 package ru.spb.yakovlev.androidacademy2020.model
 
+import ru.spb.yakovlev.androidacademy2020.ui.base.RvItemData
+
 data class MovieItemData(
-    val id: Int = 0,
+    override val id: Int = 0,
     val title: String = "",
-    val tags: String = "",
-    val duration: Int = 0,
-    val pg: String = "6+",
-    val rating: Float = 0f,
-    val reviewsCount: Int = 0,
+    val genre: String = "",
+    val runtime: Int = 0,
+    val minimumAge: String = "6+",
+    val ratings: Float = 0f,
+    val numberOfRatings: Int = 0,
     val poster: String = "",
     val isLike: Boolean = false
-)
+) : RvItemData
