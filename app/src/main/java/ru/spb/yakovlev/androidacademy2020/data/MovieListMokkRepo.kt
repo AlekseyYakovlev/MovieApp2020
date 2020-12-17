@@ -9,6 +9,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import ru.spb.yakovlev.androidacademy2020.App
 import ru.spb.yakovlev.androidacademy2020.model.DataState
+import ru.spb.yakovlev.androidacademy2020.model.Genre
 import ru.spb.yakovlev.androidacademy2020.model.MovieData
 
 object MovieListMokkRepo {
