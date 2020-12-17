@@ -48,10 +48,10 @@ object MovieListMokkRepo {
                     launch {
                         (20..100).forEach {
                             val index: Int = (it - 20) / 4
-                            if (it % 4 == 0) _moviesListState.value =
+                            if (it % 10 == 0) _moviesListState.value =
                                 DataState.Success(moviesList.take(index))
                             else _moviesListState.value = DataState.Loading(it)
-                            delay(30L)
+                            delay(50L)
                         }
                     }
                 }

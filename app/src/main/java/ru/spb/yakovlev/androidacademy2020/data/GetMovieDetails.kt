@@ -18,7 +18,6 @@ class GetMovieDetailsState(private val movieId: Int) {
     suspend fun update() {
         val movie = moviesRepo.getMovieById(movieId)
         _state.value = DataState.Success(movie.toMovieMovieDetailsData(emptyList()))
-        _state.value = DataState.Loading(null)
         val actors = actorsRepo.getActorItemsById(movie.castIds)
         delay(1000)
         _state.value = DataState.Success(movie.toMovieMovieDetailsData(actors))
@@ -29,7 +28,6 @@ class GetMovieDetailsState(private val movieId: Int) {
         val actors = actorsRepo.getActorItemsById(movie.castIds)
         _state.value = DataState.Success(movie.toMovieMovieDetailsData(actors))
     }
-
 
     private fun MovieData.toMovieMovieDetailsData(actors: List<ActorItemData>) = MovieDetailsData(
         id = id,
