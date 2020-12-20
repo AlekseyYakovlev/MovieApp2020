@@ -2,6 +2,7 @@ package ru.spb.yakovlev.androidacademy2020.ui.movie_details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -75,13 +76,11 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                             )
                             vb.tvStorylineText.text = overview
 
+                            vb.tvMovieCast.isVisible = actorItemsData.isNotEmpty()
+                            vb.rvActorsList.isVisible = actorItemsData.isNotEmpty()
+
                             if (actorItemsData.isNotEmpty()) {
-                                vb.tvMovieCast.visibility = View.VISIBLE
-                                vb.rvActorsList.visibility = View.VISIBLE
                                 rvAdapter.updateData(actorItemsData)
-                            } else {
-                                vb.tvMovieCast.visibility = View.GONE
-                                vb.rvActorsList.visibility = View.GONE
                             }
                         }
                     }
@@ -98,12 +97,12 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             viewHolderInflater = { layoutInflater, parent, attachToParent ->
                 FragmentActorItemBinding.inflate(layoutInflater, parent, attachToParent)
             },
-            viewHolderBinder = { item, data ->
-                with(item) {
-                    ivPhoto.load(data.photo) {
+            viewHolderBinder = { holder, itemData ->
+                with(holder) {
+                    ivPhoto.load(itemData.photo) {
                         placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
                     }
-                    tvName.text = data.name
+                    tvName.text = itemData.name
                 }
             },
         )
