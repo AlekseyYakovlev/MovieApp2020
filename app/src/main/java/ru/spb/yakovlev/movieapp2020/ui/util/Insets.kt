@@ -12,16 +12,19 @@ fun View.addSystemPadding(
     isConsumed: Boolean = false
 ) {
     doOnApplyWindowInsets { _, insets, initialPadding ->
+        val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
         targetView.updatePadding(
-            top = initialPadding.top + insets.systemWindowInsetTop,
-            bottom = initialPadding.bottom + insets.systemWindowInsetBottom
+            top = initialPadding.top + sysInsets.top,
+            bottom = initialPadding.bottom + sysInsets.bottom
         )
         if (isConsumed) {
-            WindowInsetsCompat.Builder(insets).setSystemWindowInsets(
+            WindowInsetsCompat.Builder(insets).setInsets(
+                WindowInsetsCompat.Type.systemBars(),
                 Insets.of(
-                    insets.systemWindowInsetLeft,
+                    sysInsets.left,
                     0,
-                    insets.systemWindowInsetRight,
+                    sysInsets.right,
                     0
                 )
             ).build()
@@ -36,16 +39,19 @@ fun View.addSystemTopPadding(
     isConsumed: Boolean = false
 ) {
     doOnApplyWindowInsets { _, insets, initialPadding ->
+        val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
         targetView.updatePadding(
-            top = initialPadding.top + insets.systemWindowInsetTop
+            top = initialPadding.top + sysInsets.top
         )
         if (isConsumed) {
-            WindowInsetsCompat.Builder(insets).setSystemWindowInsets(
+            WindowInsetsCompat.Builder(insets).setInsets(
+                WindowInsetsCompat.Type.systemBars(),
                 Insets.of(
-                    insets.systemWindowInsetLeft,
+                    sysInsets.left,
                     0,
-                    insets.systemWindowInsetRight,
-                    insets.systemWindowInsetBottom
+                    sysInsets.right,
+                    sysInsets.bottom
                 )
             ).build()
         } else {
@@ -59,15 +65,18 @@ fun View.addSystemBottomPadding(
     isConsumed: Boolean = false
 ) {
     doOnApplyWindowInsets { _, insets, initialPadding ->
+        val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
         targetView.updatePadding(
-            bottom = initialPadding.bottom + insets.systemWindowInsetBottom
+            bottom = initialPadding.bottom + sysInsets.bottom
         )
         if (isConsumed) {
-            WindowInsetsCompat.Builder(insets).setSystemWindowInsets(
+            WindowInsetsCompat.Builder(insets).setInsets(
+                WindowInsetsCompat.Type.systemBars(),
                 Insets.of(
-                    insets.systemWindowInsetLeft,
-                    insets.systemWindowInsetTop,
-                    insets.systemWindowInsetRight,
+                    sysInsets.left,
+                    sysInsets.top,
+                    sysInsets.right,
                     0
                 )
             ).build()
