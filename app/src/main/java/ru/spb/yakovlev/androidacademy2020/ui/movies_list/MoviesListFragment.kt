@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.spb.yakovlev.androidacademy2020.R
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMoviesListBinding
-import ru.spb.yakovlev.androidacademy2020.extensions.roundRating
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieItemData
 import ru.spb.yakovlev.androidacademy2020.ui.base.BaseRVAdapter
@@ -84,7 +83,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     tvPg.text = data.minimumAge
                     ivLike.isChecked = data.isLike
                     ivLike.setOnClickListener { viewModel.handleLike(data.id, !data.isLike) }
-                    ratingBar.rating = data.ratings.roundRating()
+                    ratingBar.rating = data.ratings
                     tvReview.text =
                         resources.getQuantityString(
                             R.plurals.movie_details__reviews,

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.collect
 import ru.spb.yakovlev.androidacademy2020.R
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentActorItemBinding
 import ru.spb.yakovlev.androidacademy2020.databinding.FragmentMovieDetailsBinding
-import ru.spb.yakovlev.androidacademy2020.extensions.roundRating
 import ru.spb.yakovlev.androidacademy2020.model.ActorItemData
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.MovieDetailsData
@@ -68,7 +67,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                             }
                             vb.tvTitle.text = title
                             vb.tvTags.text = genre
-                            vb.ratingBar.rating = ratings.roundRating()
+                            vb.ratingBar.rating = ratings
                             vb.tvReview.text = resources.getQuantityString(
                                 R.plurals.movie_details__reviews,
                                 numberOfRatings,

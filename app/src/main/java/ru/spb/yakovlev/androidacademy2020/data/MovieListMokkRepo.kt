@@ -11,6 +11,7 @@ import ru.spb.yakovlev.androidacademy2020.App
 import ru.spb.yakovlev.androidacademy2020.model.DataState
 import ru.spb.yakovlev.androidacademy2020.model.Genre
 import ru.spb.yakovlev.androidacademy2020.model.MovieData
+import kotlin.math.roundToInt
 
 object MovieListMokkRepo {
 
@@ -82,7 +83,7 @@ object MovieListMokkRepo {
                     .reduce { acc, genre -> "$acc, $genre" },
                 runtime = jsonMovie.runtime,
                 minimumAge = if (jsonMovie.adult) "16+" else "13+",
-                rating = jsonMovie.ratings,
+                rating = jsonMovie.ratings.roundRating(),
                 numberOfRatings = jsonMovie.votesCount,
                 poster = jsonMovie.posterPicture,
                 poster2 = jsonMovie.backdropPicture,
@@ -102,6 +103,8 @@ object MovieListMokkRepo {
         moviesList[index] = oldCopy.copy(isLike = isLike)
         _moviesListState.value = DataState.Success(moviesList)
     }
+
+    private fun Float.roundRating() = this.roundToInt().toFloat() / 2
 
     @Serializable
     private class JsonMovie(
