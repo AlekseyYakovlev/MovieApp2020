@@ -1,2 +1,2 @@
 include(":app")
-rootProject.name = "AndroidAcademy2020"
+rootProject.name = "MovieApp2020"

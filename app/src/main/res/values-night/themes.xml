@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.AndroidAcademy2020" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MovieApp2020" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="background">@color/dark_grey</item>
 

@@ -84,14 +84,14 @@
             app:layout_constraintTop_toTopOf="@id/gl_top"
             tools:text="13+" />
 
-        <ru.spb.yakovlev.androidacademy2020.ui.custom.CheckableImageView
+        <ru.spb.yakovlev.movieapp2020.ui.custom.CheckableImageView
             android:id="@+id/iv_like"
             style="@style/ImageView.Like"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pg"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintTop_toTopOf="@+id/tv_pg" />
 
-        <ru.spb.yakovlev.androidacademy2020.ui.custom.RatingBarSvg
+        <ru.spb.yakovlev.movieapp2020.ui.custom.RatingBarSvg
             android:id="@+id/ratingBar"
             style="@style/RatingBarSvg"
             android:isIndicator="true"

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.spb.yakovlev.androidacademy2020">
+    package="ru.spb.yakovlev.movieapp2020">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
+        android:name="ru.spb.yakovlev.movieapp2020.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AndroidAcademy2020">
-        <activity android:name=".ui.RootActivity">
+        android:theme="@style/Theme.MovieApp2020">
+        <activity android:name="ru.spb.yakovlev.movieapp2020.ui.RootActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
