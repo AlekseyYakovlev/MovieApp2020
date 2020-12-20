@@ -2,6 +2,7 @@ package ru.spb.yakovlev.androidacademy2020.ui.movies_list
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -48,21 +49,21 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     is DataState.Empty -> {
                     }
                     is DataState.Loading -> {
-                        vb.progressBar.visibility = View.VISIBLE
+                        vb.progressBar.isVisible = true
                         it.progress?.let { progress ->
-                            vb.tvProgressBarText.visibility = View.VISIBLE
+                            vb.tvProgressBarText.isVisible = true
                             vb.tvProgressBarText.text =
                                 resources.getString(R.string.progress, progress)
                         }
                     }
                     is DataState.Success<List<MovieItemData>> -> {
-                        vb.progressBar.visibility = View.GONE
-                        vb.tvProgressBarText.visibility = View.GONE
+                        vb.progressBar.isVisible = false
+                        vb.tvProgressBarText.isVisible = false
                         rvAdapter.updateData(it.data)
                     }
                     is DataState.Error -> {
-                        vb.progressBar.visibility = View.GONE
-                        vb.tvProgressBarText.visibility = View.GONE
+                        vb.progressBar.isVisible = false
+                        vb.tvProgressBarText.isVisible = false
                         Snackbar.make(vb.root, it.errorMessage, Snackbar.LENGTH_LONG).show()
                     }
                 }
@@ -75,28 +76,28 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             viewHolderInflater = { layoutInflater, parent, attachToParent ->
                 FragmentMovieItemBinding.inflate(layoutInflater, parent, attachToParent)
             },
-            viewHolderBinder = { item, data ->
-                with(item) {
-                    ivPoster.load(data.poster) {
+            viewHolderBinder = { holder, itemData ->
+                with(holder) {
+                    ivPoster.load(itemData.poster) {
                         placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
                     }
-                    tvPg.text = data.minimumAge
-                    ivLike.isChecked = data.isLike
-                    ivLike.setOnClickListener { viewModel.handleLike(data.id, !data.isLike) }
-                    ratingBar.rating = data.ratings
+                    tvPg.text = itemData.minimumAge
+                    ivLike.isChecked = itemData.isLike
+                    ivLike.setOnClickListener { viewModel.handleLike(itemData.id, !itemData.isLike) }
+                    ratingBar.rating = itemData.ratings
                     tvReview.text =
                         resources.getQuantityString(
                             R.plurals.movie_details__reviews,
-                            data.numberOfRatings,
-                            data.numberOfRatings
+                            itemData.numberOfRatings,
+                            itemData.numberOfRatings
                         )
-                    tvHeader.text = data.title
-                    tvTags.text = data.genre
+                    tvHeader.text = itemData.title
+                    tvTags.text = itemData.genre
                     tvTiming.text = resources.getString(
                         R.string.minutes,
-                        data.runtime
+                        itemData.runtime
                     )
-                    root.setOnClickListener { clickListener?.invoke(data.id) }
+                    root.setOnClickListener { clickListener?.invoke(itemData.id) }
                 }
             },
         )
