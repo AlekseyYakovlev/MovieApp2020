@@ -12,7 +12,7 @@ android {
         targetSdkVersion(30)
         buildToolsVersion = "30.0.3"
 
-        applicationId = "ru.spb.yakovlev.androidacademy2020"
+        applicationId = "ru.spb.yakovlev.movieapp2020"
         versionCode = 1
         versionName = "1.0"
 
