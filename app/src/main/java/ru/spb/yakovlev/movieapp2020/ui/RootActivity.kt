@@ -64,16 +64,18 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     private fun handleLeftAndRightInsets() {
         vb.rootContainer.doOnApplyWindowInsets { view, insets, initialPadding ->
+            val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(
-                left = initialPadding.left + insets.systemWindowInsetLeft,
-                right = initialPadding.right + insets.systemWindowInsetRight
+                left = initialPadding.left + sysInsets.left,
+                right = initialPadding.right + sysInsets.right
             )
-            WindowInsetsCompat.Builder(insets).setSystemWindowInsets(
+            WindowInsetsCompat.Builder(insets).setInsets(
+                WindowInsetsCompat.Type.systemBars(),
                 Insets.of(
                     0,
-                    insets.systemWindowInsetTop,
+                    sysInsets.top,
                     0,
-                    insets.systemWindowInsetBottom
+                    sysInsets.bottom
                 )
             ).build()
         }
