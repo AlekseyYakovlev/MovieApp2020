@@ -1,4 +1,4 @@
-package ru.spb.yakovlev.movieapp2020.viewmodels
+package ru.spb.yakovlev.movieapp2020.ui.movies_list
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.Flow

@@ -19,13 +19,13 @@ import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
-import ru.spb.yakovlev.movieapp2020.viewmodels.MoviesListViewModel
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     var clickListener: ((Int) -> Unit)? = null
 
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
+    private val filmsListRvAdapter by lazy(::setupRecyclerViewAdapter)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,40 +33,40 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun setupViews() {
-        val rvAdapter = setupRecyclerViewAdapter()
-
         vb.tvPageTitle.addSystemTopPadding()
 
         vb.rvMoviesList.apply {
             addSystemPadding()
-            adapter = rvAdapter
+            adapter = filmsListRvAdapter
             setHasFixedSize(true)
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.moviesListState.collectLatest {
-                when (it) {
-                    is DataState.Empty -> {
-                    }
-                    is DataState.Loading -> {
-                        vb.progressBar.isVisible = true
-                        it.progress?.let { progress ->
-                            vb.tvProgressBarText.isVisible = true
-                            vb.tvProgressBarText.text =
-                                resources.getString(R.string.progress, progress)
-                        }
-                    }
-                    is DataState.Success<List<MovieItemData>> -> {
-                        vb.progressBar.isVisible = false
-                        vb.tvProgressBarText.isVisible = false
-                        rvAdapter.updateData(it.data)
-                    }
-                    is DataState.Error -> {
-                        vb.progressBar.isVisible = false
-                        vb.tvProgressBarText.isVisible = false
-                        Snackbar.make(vb.root, it.errorMessage, Snackbar.LENGTH_LONG).show()
-                    }
+            viewModel.moviesListState.collectLatest(::renderState)
+        }
+    }
+
+    private fun renderState(state: DataState<List<MovieItemData>>) {
+        when (state) {
+            is DataState.Empty -> {
+            }
+            is DataState.Loading -> {
+                vb.progressBar.isVisible = true
+                state.progress?.let { progress ->
+                    vb.tvProgressBarText.isVisible = true
+                    vb.tvProgressBarText.text =
+                        resources.getString(R.string.progress, progress)
                 }
+            }
+            is DataState.Success<List<MovieItemData>> -> {
+                vb.progressBar.isVisible = false
+                vb.tvProgressBarText.isVisible = false
+                filmsListRvAdapter.updateData(state.data)
+            }
+            is DataState.Error -> {
+                vb.progressBar.isVisible = false
+                vb.tvProgressBarText.isVisible = false
+                Snackbar.make(vb.root, state.errorMessage, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -83,7 +83,12 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     }
                     tvPg.text = itemData.minimumAge
                     ivLike.isChecked = itemData.isLike
-                    ivLike.setOnClickListener { viewModel.handleLike(itemData.id, !itemData.isLike) }
+                    ivLike.setOnClickListener {
+                        viewModel.handleLike(
+                            itemData.id,
+                            !itemData.isLike
+                        )
+                    }
                     ratingBar.rating = itemData.ratings
                     tvReview.text =
                         resources.getQuantityString(

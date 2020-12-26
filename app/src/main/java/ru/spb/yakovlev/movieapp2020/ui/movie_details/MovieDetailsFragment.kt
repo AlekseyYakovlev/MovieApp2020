@@ -20,74 +20,73 @@ import ru.spb.yakovlev.movieapp2020.ui.RootActivity
 import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
-import ru.spb.yakovlev.movieapp2020.viewmodels.MovieDetailsViewModel
 
 class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private val viewModel: MovieDetailsViewModel by viewModels()
     private val vb by viewBinding(FragmentMovieDetailsBinding::bind)
+    private val actorsRvAdapter by lazy(::setupRecyclerViewAdapter)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val movieId = arguments?.getInt(RootActivity.ARG_TAG__MOVIE_ID, 0) ?: 0
+        viewModel.setMovieId(movieId)
         setupViews()
     }
 
     private fun setupViews() {
-        val movieId = arguments?.getInt(RootActivity.ARG_TAG__MOVIE_ID, 0) ?: 0
-        viewModel.setMovieId(movieId)
-
         vb.movieDetailsRoot.addSystemPadding()
 
         vb.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        val rvAdapter = setupRecyclerViewAdapter()
+
         vb.rvActorsList.apply {
-            adapter = rvAdapter
+            adapter = actorsRvAdapter
             setHasFixedSize(true)
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.movieDetailsState.collect {
-                when (it) {
-                    is DataState.Empty -> {
-                        vb.tvMovieCast
-                    }
-                    is DataState.Loading -> {
-                    }
-                    is DataState.Success<MovieDetailsData> -> {
-                        with(it.data) {
-                            vb.ivPoster.load(backdrop) {
-                                placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
-                            }
-                            vb.tvPg.text = minimumAge
-                            vb.ivLike.apply {
-                                isChecked = isLike
-                                setOnClickListener { viewModel.handleLike(movieId, !isLike) }
-                            }
-                            vb.tvTitle.text = title
-                            vb.tvTags.text = genre
-                            vb.ratingBar.rating = ratings
-                            vb.tvReview.text = resources.getQuantityString(
-                                R.plurals.movie_details__reviews,
-                                numberOfRatings,
-                                numberOfRatings
-                            )
-                            vb.tvStorylineText.text = overview
+            viewModel.movieDetailsState.collect(::renderState)
+        }
+    }
 
-                            vb.tvMovieCast.isVisible = actorItemsData.isNotEmpty()
-                            vb.rvActorsList.isVisible = actorItemsData.isNotEmpty()
-
-                            if (actorItemsData.isNotEmpty()) {
-                                rvAdapter.updateData(actorItemsData)
-                            }
-                        }
+    private fun renderState(state: DataState<MovieDetailsData>) {
+        when (state) {
+            is DataState.Empty -> {
+            }
+            is DataState.Loading -> {
+            }
+            is DataState.Success<MovieDetailsData> -> {
+                with(state.data) {
+                    vb.ivPoster.load(backdrop) {
+                        placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
                     }
-                    is DataState.Error -> {
-                        Snackbar.make(vb.root, it.errorMessage, Snackbar.LENGTH_LONG).show()
+                    vb.tvPg.text = minimumAge
+                    vb.ivLike.apply {
+                        isChecked = isLike
+                        setOnClickListener { viewModel.handleLike(!isLike) }
+                    }
+                    vb.tvTitle.text = title
+                    vb.tvTags.text = genre
+                    vb.ratingBar.rating = ratings
+                    vb.tvReview.text = resources.getQuantityString(
+                        R.plurals.movie_details__reviews,
+                        numberOfRatings,
+                        numberOfRatings
+                    )
+                    vb.tvStorylineText.text = overview
+
+                    vb.tvMovieCast.isVisible = actorItemsData.isNotEmpty()
+                    vb.rvActorsList.isVisible = actorItemsData.isNotEmpty()
+
+                    if (actorItemsData.isNotEmpty()) {
+                        actorsRvAdapter.updateData(actorItemsData)
                     }
                 }
+            }
+            is DataState.Error -> {
+                Snackbar.make(vb.root, state.errorMessage, Snackbar.LENGTH_LONG).show()
             }
         }
     }
