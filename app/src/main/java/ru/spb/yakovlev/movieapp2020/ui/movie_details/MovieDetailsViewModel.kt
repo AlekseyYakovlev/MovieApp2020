@@ -1,4 +1,4 @@
-package ru.spb.yakovlev.movieapp2020.viewmodels
+package ru.spb.yakovlev.movieapp2020.ui.movie_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +32,7 @@ class MovieDetailsViewModel : ViewModel() {
         }
     }
 
-    fun handleLike(movieId: Int, isLike: Boolean) {
+    fun handleLike(isLike: Boolean) {
         MovieListMokkRepo.updateMovieLike(movieId, isLike)
         getMovieDetailsState.handleLike()
     }
