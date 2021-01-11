@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.metadata
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentActorItemBinding
@@ -21,6 +22,7 @@ import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
 
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private val viewModel: MovieDetailsViewModel by viewModels()

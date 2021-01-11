@@ -8,8 +8,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.metadata
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collectLatest
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMoviesListBinding
@@ -20,6 +21,7 @@ import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
 
+@AndroidEntryPoint
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     var clickListener: ((Int) -> Unit)? = null
 
