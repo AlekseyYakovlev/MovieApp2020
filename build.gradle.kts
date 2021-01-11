@@ -1,5 +1,6 @@
 buildscript {
     val kotlinVersion by extra("1.4.21")
+    val hiltVersion by extra("2.30.1-alpha")
     repositories {
         google()
         jcenter()
@@ -8,6 +9,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
         classpath("com.android.tools.build:gradle:4.1.1")
+        classpath ("com.google.dagger:hilt-android-gradle-plugin:${hiltVersion}")
     }
 }
 
