@@ -1,21 +1,23 @@
 package ru.spb.yakovlev.movieapp2020.ui.movie_details
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.spb.yakovlev.movieapp2020.data.GetMovieDetailsState
-import ru.spb.yakovlev.movieapp2020.data.MovieListMokkRepo
 import ru.spb.yakovlev.movieapp2020.model.DataState
-import ru.spb.yakovlev.movieapp2020.model.MovieDetailsData
+import ru.spb.yakovlev.movieapp2020.model.MovieDetailsDataWithCast
+import ru.spb.yakovlev.movieapp2020.model.interactors.GetMovieDetailsState
 
-class MovieDetailsViewModel : ViewModel() {
+class MovieDetailsViewModel@ViewModelInject constructor(
+    private val getMovieDetailsState: GetMovieDetailsState
+)
+    : ViewModel() {
 
     private var movieId = 0
-    lateinit var getMovieDetailsState: GetMovieDetailsState
 
-    val movieDetailsState: StateFlow<DataState<MovieDetailsData>>
+    val movieDetailsState: StateFlow<DataState<MovieDetailsDataWithCast>>
         get() {
             return when (movieId) {
                 0 -> MutableStateFlow(DataState.Empty)
@@ -25,15 +27,13 @@ class MovieDetailsViewModel : ViewModel() {
 
     fun setMovieId(id: Int) {
         movieId = id
-        getMovieDetailsState = GetMovieDetailsState(movieId)
 
         viewModelScope.launch {
-            getMovieDetailsState.update()
+            getMovieDetailsState.update(movieId)
         }
     }
 
     fun handleLike(isLike: Boolean) {
-        MovieListMokkRepo.updateMovieLike(movieId, isLike)
-        getMovieDetailsState.handleLike()
+        // TODO Fix handleLike
     }
 }

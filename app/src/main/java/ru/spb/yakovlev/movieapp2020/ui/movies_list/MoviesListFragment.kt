@@ -6,6 +6,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.metadata
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,16 +16,18 @@ import kotlinx.coroutines.launch
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMoviesListBinding
-import ru.spb.yakovlev.movieapp2020.model.DataState
 import ru.spb.yakovlev.movieapp2020.model.MovieItemData
-import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
+import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVPagingAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     var clickListener: ((Int) -> Unit)? = null
+
+    var scrollPosition = 0
 
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
@@ -34,47 +38,41 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         setupViews()
     }
 
+    override fun onPause() {
+        super.onPause()
+        scrollPosition =
+            (vb.rvMoviesList.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
+        Timber.d("123456 onPause $scrollPosition")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vb.rvMoviesList.scrollToPosition(scrollPosition)
+        Timber.d("123456 onResume $scrollPosition")
+    }
+
     private fun setupViews() {
+        Timber.d("123456 setupViews()")
         vb.tvPageTitle.addSystemTopPadding()
 
         vb.rvMoviesList.apply {
             addSystemPadding()
+            filmsListRvAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = filmsListRvAdapter
             setHasFixedSize(true)
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.moviesListState.collectLatest(::renderState)
-        }
-    }
-
-    private fun renderState(state: DataState<List<MovieItemData>>) {
-        when (state) {
-            is DataState.Empty -> {
-            }
-            is DataState.Loading -> {
-                vb.progressBar.isVisible = true
-                state.progress?.let { progress ->
-                    vb.tvProgressBarText.isVisible = true
-                    vb.tvProgressBarText.text =
-                        resources.getString(R.string.progress, progress)
-                }
-            }
-            is DataState.Success<List<MovieItemData>> -> {
-                vb.progressBar.isVisible = false
-                vb.tvProgressBarText.isVisible = false
-                filmsListRvAdapter.updateData(state.data)
-            }
-            is DataState.Error -> {
-                vb.progressBar.isVisible = false
-                vb.tvProgressBarText.isVisible = false
-                Snackbar.make(vb.root, state.errorMessage, Snackbar.LENGTH_LONG).show()
+        lifecycleScope.launch {
+            Timber.d("123456 lifecycleScope.launch()")
+            viewModel.showPopularMovies().collect {
+                filmsListRvAdapter.submitData(it)
             }
         }
     }
 
     private fun setupRecyclerViewAdapter() =
-        BaseRVAdapter<FragmentMovieItemBinding, MovieItemData>(
+        BaseRVPagingAdapter<FragmentMovieItemBinding, MovieItemData>(
             viewHolderInflater = { layoutInflater, parent, attachToParent ->
                 FragmentMovieItemBinding.inflate(layoutInflater, parent, attachToParent)
             },
@@ -91,7 +89,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                             !itemData.isLike
                         )
                     }
-                    ratingBar.rating = itemData.ratings
+                    ratingBar.rating = itemData.voteAverage
                     tvReview.text =
                         resources.getQuantityString(
                             R.plurals.movie_details__reviews,
@@ -100,10 +98,15 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         )
                     tvHeader.text = itemData.title
                     tvTags.text = itemData.genre
-                    tvTiming.text = resources.getString(
-                        R.string.minutes,
-                        itemData.runtime
-                    )
+
+                    if (itemData.runtime > 0) {
+                        tvTiming.isVisible = true
+                        tvTiming.text = resources.getString(
+                            R.string.minutes,
+                            itemData.runtime
+                        )
+                    } else tvTiming.isVisible = true
+
                     root.setOnClickListener { clickListener?.invoke(itemData.id) }
                 }
             },
