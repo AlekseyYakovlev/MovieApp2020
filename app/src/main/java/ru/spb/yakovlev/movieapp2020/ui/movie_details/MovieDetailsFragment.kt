@@ -16,7 +16,7 @@ import ru.spb.yakovlev.movieapp2020.databinding.FragmentActorItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieDetailsBinding
 import ru.spb.yakovlev.movieapp2020.model.ActorItemData
 import ru.spb.yakovlev.movieapp2020.model.DataState
-import ru.spb.yakovlev.movieapp2020.model.MovieDetailsData
+import ru.spb.yakovlev.movieapp2020.model.MovieDetailsDataWithCast
 import ru.spb.yakovlev.movieapp2020.ui.RootActivity
 import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
@@ -53,13 +53,13 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         }
     }
 
-    private fun renderState(state: DataState<MovieDetailsData>) {
+    private fun renderState(state: DataState<MovieDetailsDataWithCast>) {
         when (state) {
             is DataState.Empty -> {
             }
             is DataState.Loading -> {
             }
-            is DataState.Success<MovieDetailsData> -> {
+            is DataState.Success<MovieDetailsDataWithCast> -> {
                 with(state.data) {
                     vb.ivPoster.load(backdrop) {
                         placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
@@ -71,7 +71,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                     }
                     vb.tvTitle.text = title
                     vb.tvTags.text = genre
-                    vb.ratingBar.rating = ratings
+                    vb.ratingBar.rating = voteAverage
                     vb.tvReview.text = resources.getQuantityString(
                         R.plurals.movie_details__reviews,
                         numberOfRatings,
@@ -100,8 +100,12 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             },
             viewHolderBinder = { holder, itemData ->
                 with(holder) {
-                    ivPhoto.load(itemData.photo) {
-                        placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
+                    if (itemData.photo.isNotBlank()) {
+                        ivPhoto.load(itemData.photo) {
+                            placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
+                        }
+                    } else {
+                        ivPhoto.load(R.drawable.ic_avatar_placeholder)
                     }
                     tvName.text = itemData.name
                 }
