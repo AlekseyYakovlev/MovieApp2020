@@ -7,6 +7,8 @@
     <string name="minutes">%d min</string>
     <string name="progress" translatable="false">%d%%</string>
     <string name="movies_list__movies_list_title">Movies list</string>
+    <string name="app_locale">en-US</string>
+    <string name="app_default_location">US</string>
 
     <plurals name="movie_details__reviews">
         <item quantity="one">%d review</item>
