@@ -1,6 +1,6 @@
 package ru.spb.yakovlev.movieapp2020.model
 
-data class MovieDetailsData (
+data class MovieDetailsDataWithCast (
     val id: Int = 0,
     val title: String = "",
     val genre: String = "",
@@ -11,4 +11,5 @@ data class MovieDetailsData (
     val backdrop: String = "",
     val isLike: Boolean = false,
     val overview: String = "",
+    val actorItemsData: List<ActorItemData> = listOf(),
 )

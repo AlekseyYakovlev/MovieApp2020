@@ -8,7 +8,7 @@ data class MovieItemData(
     val genre: String = "",
     val runtime: Int = 0,
     val minimumAge: String = "6+",
-    val ratings: Float = 0f,
+    val voteAverage: Float = 0f,
     val numberOfRatings: Int = 0,
     val poster: String = "",
     val isLike: Boolean = false
