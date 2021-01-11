@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("plugin.serialization")
+    kotlin("kapt")
+    id ("dagger.hilt.android.plugin")
 }
 
 android {
@@ -23,6 +25,7 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
             isDebuggable = true
+
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -32,17 +35,28 @@ android {
                 "proguard-rules.pro"
             )
         }
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-        buildFeatures {
-            viewBinding = true
+    }
+
+    flavorDimensions("serverType")
+    productFlavors {
+        create("serverType") {
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "API_KEY", "\"bc91c18ffa6957b8f05c295a2e70bdc5\"")
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-Xinline-classes") // allows to use inline-classes
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+
 }
 
 dependencies {
@@ -51,6 +65,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation ("androidx.recyclerview:recyclerview:1.2.0-beta01")
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
@@ -74,6 +89,27 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil:1.1.0")
+
+    // Retrofit + OkHttp
+    val okHttpVersion = "4.9.0"
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    //implementation ("com.squareup.okhttp3:mockwebserver:$okHttpVersion")
+
+    // Paging library
+    implementation ("androidx.paging:paging-runtime:3.0.0-alpha11")
+
+    // Dagger + Hilt
+    val daggerVersion = "2.30.1"
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
+    kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+    val androidxHilt = "1.0.0-alpha02"
+    implementation("androidx.hilt:hilt-lifecycle-viewmodel:$androidxHilt")
+    kapt("androidx.hilt:hilt-compiler:$androidxHilt")
 
     //Log
     implementation("com.jakewharton.timber:timber:4.7.1")
