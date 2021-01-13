@@ -17,7 +17,6 @@ import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieDetailsBinding
 import ru.spb.yakovlev.movieapp2020.model.ActorItemData
 import ru.spb.yakovlev.movieapp2020.model.DataState
 import ru.spb.yakovlev.movieapp2020.model.MovieDetailsDataWithCast
-import ru.spb.yakovlev.movieapp2020.ui.RootActivity
 import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
@@ -31,7 +30,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movieId = arguments?.getInt(RootActivity.ARG_TAG__MOVIE_ID, 0) ?: 0
+        val movieId = arguments?.getInt(ARGUMENT_TAG, 0) ?: 0
         viewModel.setMovieId(movieId)
         setupViews()
     }
@@ -111,4 +110,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                 }
             },
         )
+
+    companion object{
+        const val ARGUMENT_TAG = "MOVIE_ID"
+    }
 }

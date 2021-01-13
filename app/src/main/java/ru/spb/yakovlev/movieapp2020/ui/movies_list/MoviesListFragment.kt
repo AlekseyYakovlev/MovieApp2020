@@ -13,6 +13,7 @@ import coil.metadata
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import ru.spb.yakovlev.movieapp2020.Navigator
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMoviesListBinding
@@ -22,16 +23,19 @@ import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
-    var clickListener: ((Int) -> Unit)? = null
 
-    var scrollPosition = 0
+    private var scrollPosition = 0
 
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
     private val filmsListRvAdapter by lazy(::setupRecyclerViewAdapter)
+
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +51,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     override fun onResume() {
         super.onResume()
-        vb.rvMoviesList.scrollToPosition(scrollPosition)
+        vb.rvMoviesList.layoutManager?.let {
+            val count = it.itemCount
+            if (count > scrollPosition) it.scrollToPosition(scrollPosition)
+            Timber.d("123456 onResume count $count  scrollPosition $scrollPosition")
+        }
         Timber.d("123456 onResume $scrollPosition")
     }
 
@@ -107,7 +115,12 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         )
                     } else tvTiming.isVisible = true
 
-                    root.setOnClickListener { clickListener?.invoke(itemData.id) }
+                    root.setOnClickListener {
+                        navigator.navigateTo(
+                            Navigator.Destination.MOVIE_DETAILS_FRAGMENT,
+                            itemData.id
+                        )
+                    }
                 }
             },
         )
