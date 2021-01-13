@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ru.spb.yakovlev.movieapp2020.data.repositories.GenresRepo
 import ru.spb.yakovlev.movieapp2020.data.repositories.MovieListRepo
-import ru.spb.yakovlev.movieapp2020.model.Locale
 import ru.spb.yakovlev.movieapp2020.model.MovieData
 import ru.spb.yakovlev.movieapp2020.model.MovieItemData
 import javax.inject.Inject
@@ -16,14 +15,12 @@ import javax.inject.Inject
 class GetMoviesListPopular @Inject constructor(
     private val genresRepo: GenresRepo,
     private val movieListRepo: MovieListRepo,
-    locale: Locale,
 ) : IUseCase {
-    private val lang = locale.name
 
     suspend fun getMoviesStream(): Flow<PagingData<MovieItemData>> {
         val genres =
             withContext(Dispatchers.IO) {
-                genresRepo.getMovieGenres(lang)
+                genresRepo.getMovieGenres()
             }
 
         return movieListRepo.getPopularMoviesStream().map { pagingData ->

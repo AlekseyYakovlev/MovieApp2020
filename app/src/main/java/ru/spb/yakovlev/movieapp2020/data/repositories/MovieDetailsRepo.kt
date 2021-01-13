@@ -2,7 +2,6 @@ package ru.spb.yakovlev.movieapp2020.data.repositories
 
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
 import ru.spb.yakovlev.movieapp2020.data.remote.resp.MovieDetailsResponse
-import ru.spb.yakovlev.movieapp2020.model.ApiKey
 import ru.spb.yakovlev.movieapp2020.model.ApiSettings
 import ru.spb.yakovlev.movieapp2020.model.MovieDetailsData
 import javax.inject.Inject
@@ -14,15 +13,12 @@ interface IMovieDetailsRepo {
 
 class MovieDetailsRepo @Inject constructor(
     private val network: RestService,
-    apiKey: ApiKey,
     private val apiSettings: ApiSettings,
 ) : IMovieDetailsRepo {
-    private val key = apiKey.value
 
     override suspend fun getMoveDetailsById(movieId: Int, language: String): MovieDetailsData {
         return network.getMovieDetails(
             movieId = movieId,
-            apiKey = key,
             language = language,
         ).toMovieDetailsData()
     }

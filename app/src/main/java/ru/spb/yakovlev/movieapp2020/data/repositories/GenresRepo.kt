@@ -2,27 +2,26 @@ package ru.spb.yakovlev.movieapp2020.data.repositories
 
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
 import ru.spb.yakovlev.movieapp2020.data.remote.resp.GenresResponse
-import ru.spb.yakovlev.movieapp2020.model.ApiKey
 import ru.spb.yakovlev.movieapp2020.model.Genre
+import ru.spb.yakovlev.movieapp2020.model.Locale
 import javax.inject.Inject
 
 interface IGenresRepo {
-    suspend fun getMovieGenres(language: String): List<Genre>
+    suspend fun getMovieGenres(): List<Genre>
 }
 
 class GenresRepo @Inject constructor(
     private val network: RestService,
-    apiKey: ApiKey,
+    locale: Locale,
 ) : IGenresRepo {
-    private val key = apiKey.value
+    private val lang = locale.name
 
     private var movieGenresList: List<Genre>? = null
 
-    override suspend fun getMovieGenres(language: String): List<Genre> {
+    override suspend fun getMovieGenres(): List<Genre> {
         if (movieGenresList == null) {
             movieGenresList = network.getMovieGenres(
-                apiKey = key,
-                language = language,
+                language = lang,
             ).genres.map { it.toGenre() }
         }
         return movieGenresList!!
