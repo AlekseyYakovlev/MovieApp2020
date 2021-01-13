@@ -94,6 +94,30 @@ fun View.doOnApplyWindowInsets(block: (View, insets: WindowInsetsCompat, initial
     requestApplyInsetsWhenAttached()
 }
 
+/**
+ * Should be used in onCreate method of an activity
+ */
+fun View.handleLeftAndRightInsets(
+    targetView: View = this
+) {
+    targetView.doOnApplyWindowInsets { view, insets, initialPadding ->
+        val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.updatePadding(
+            left = initialPadding.left + sysInsets.left,
+            right = initialPadding.right + sysInsets.right
+        )
+        WindowInsetsCompat.Builder(insets).setInsets(
+            WindowInsetsCompat.Type.systemBars(),
+            Insets.of(
+                0,
+                sysInsets.top,
+                0,
+                sysInsets.bottom
+            )
+        ).build()
+    }
+}
+
 private fun recordInitialPaddingForView(view: View) =
     Rect(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)
 

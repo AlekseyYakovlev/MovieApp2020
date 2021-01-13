@@ -17,9 +17,9 @@ class Navigator @Inject constructor(
 
     fun navigateTo(destination: Destination, arguments: Int? = null) {
 
-        val args = arguments?.let { argument ->
+        val args: Bundle? = arguments?.let { argValue ->
             Bundle().apply {
-                destination.argTag?.let { putInt(it, argument) }
+                destination.argTag?.let { argTag -> putInt(argTag, argValue) }
                     ?: run { Timber.e("No ARGUMENT_TAG in destination fragment ${destination.fragmentTag}") }
             }
         }
