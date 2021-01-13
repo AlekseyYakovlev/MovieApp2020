@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 import ru.spb.yakovlev.movieapp2020.BuildConfig
 import ru.spb.yakovlev.movieapp2020.data.remote.NetworkMonitor
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
+import ru.spb.yakovlev.movieapp2020.data.remote.interceptors.ApiKeyAuthenticator
 import ru.spb.yakovlev.movieapp2020.data.remote.interceptors.ErrorStatusInterceptor
 import ru.spb.yakovlev.movieapp2020.data.remote.interceptors.NetworkStatusInterceptor
 import ru.spb.yakovlev.movieapp2020.model.ApiKey
@@ -55,6 +56,7 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         //tokenAuthenticator: TokenAuthenticator,
+        apiKeyAuthenticator: ApiKeyAuthenticator,
         networkStatusInterceptor: NetworkStatusInterceptor,
         httpLoggingInterceptor: HttpLoggingInterceptor,
         errorStatusInterceptor: ErrorStatusInterceptor
@@ -62,11 +64,19 @@ object NetworkModule {
         OkHttpClient().newBuilder()
             .readTimeout(2, TimeUnit.SECONDS)  // socket timeout (GET)
             .writeTimeout(5, TimeUnit.SECONDS) // socket timeout (POST, PUT, etc.)
-            //.authenticator(tokenAuthenticator)         // refresh token if response code == 401
             .addInterceptor(networkStatusInterceptor)  // intercept network status
+            .addInterceptor(apiKeyAuthenticator)
+            // .authenticator(tokenAuthenticator)         // refresh token if response code == 401
             .addInterceptor(httpLoggingInterceptor)    // log requests/results
             .addInterceptor(errorStatusInterceptor)    // intercept network errors
             .build()
+
+    @Provides
+    @Singleton
+    fun provideApiKeyAuthenticator(
+        apiKey: ApiKey
+    ): ApiKeyAuthenticator =
+        ApiKeyAuthenticator(apiKey.value)
 
     @Provides
     @Singleton

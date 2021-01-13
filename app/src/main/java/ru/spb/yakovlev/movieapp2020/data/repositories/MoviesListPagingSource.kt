@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import retrofit2.HttpException
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
 import ru.spb.yakovlev.movieapp2020.data.remote.resp.MovieResp
-import ru.spb.yakovlev.movieapp2020.model.ApiKey
 import ru.spb.yakovlev.movieapp2020.model.ApiSettings
 import ru.spb.yakovlev.movieapp2020.model.Locale
 import ru.spb.yakovlev.movieapp2020.model.MovieData
@@ -16,12 +15,10 @@ private const val STARTING_PAGE_INDEX = 1
 
 class MoviesListPagingSource @Inject constructor(
     private val network: RestService,
-    apiKey: ApiKey,
     private val apiSettings: ApiSettings,
     locale: Locale,
 ) : PagingSource<Int, MovieData>() {
 
-    private val apiKeyString = apiKey.value
     private val lang = locale.name
     private val region = locale.country
 
@@ -30,7 +27,6 @@ class MoviesListPagingSource @Inject constructor(
         return try {
             val response = network.getPopular(
                 page = position,
-                apiKey = apiKeyString,
                 language = lang,
                 region = region
             )
