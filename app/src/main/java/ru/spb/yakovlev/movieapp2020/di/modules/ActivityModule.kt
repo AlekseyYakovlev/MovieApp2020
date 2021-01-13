@@ -21,6 +21,7 @@ class ActivityModule {
     )
 
     @Provides
-    fun provideActivity(activity: Activity): RootActivity =
-        activity as RootActivity
+    fun providesActivity(
+        activity: Activity
+    ): RootActivity = activity as RootActivity
 }
