@@ -3,7 +3,7 @@ package ru.spb.yakovlev.movieapp2020.data.repositories
 import androidx.paging.PagingSource
 import retrofit2.HttpException
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
-import ru.spb.yakovlev.movieapp2020.data.remote.resp.MovieResp
+import ru.spb.yakovlev.movieapp2020.data.remote.resp.MovieResponse
 import ru.spb.yakovlev.movieapp2020.model.ApiSettings
 import ru.spb.yakovlev.movieapp2020.model.Locale
 import ru.spb.yakovlev.movieapp2020.model.MovieData
@@ -48,7 +48,7 @@ class MoviesListPagingSource @Inject constructor(
         }
     }
 
-    private fun MovieResp.toMovieData() =
+    private fun MovieResponse.toMovieData() =
         MovieData(
             id = id,
             title = title,
