@@ -15,7 +15,6 @@ import ru.spb.yakovlev.movieapp2020.data.remote.resp.MovieResponse
 import ru.spb.yakovlev.movieapp2020.model.ApiSettings
 import ru.spb.yakovlev.movieapp2020.model.Locale
 import ru.spb.yakovlev.movieapp2020.model.MovieData
-import timber.log.Timber
 import java.io.IOException
 import java.io.InvalidObjectException
 import javax.inject.Inject
@@ -43,11 +42,9 @@ class MoviesListRemoteMediator @Inject constructor(
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                Timber.tag("123456").d("LoadType.REFRESH ")
                 remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-                Timber.tag("123456").d("LoadType.PREPEND")
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 if (remoteKeys == null) {
                     // The LoadType is PREPEND so some data was loaded before,
@@ -63,25 +60,20 @@ class MoviesListRemoteMediator @Inject constructor(
                 remoteKeys.prevKey
             }
             LoadType.APPEND -> {
-                Timber.tag("123456").d("LoadType.APPEND")
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 if (remoteKeys == null || remoteKeys.nextKey == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
-                Timber.tag("123456").d("APPEND nextKey = ${remoteKeys.nextKey}")
                 remoteKeys.nextKey
             }
         }
-        //val apiQuery = query + IN_QUALIFIER
 
         try {
-            //val apiResponse = service.searchRepos(apiQuery, page, state.config.pageSize)
             val response = network.getPopular(
                 page = page,
                 language = lang,
                 region = region
             )
-            Timber.tag("123456").d("try response  page = $page  response.page ${response.page}")
             val moviesList = response.movies.map { it.toMovieData() }
             val endOfPaginationReached = (response.page >= response.totalPages)
             db.withTransaction {
@@ -92,7 +84,6 @@ class MoviesListRemoteMediator @Inject constructor(
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else (page - 1)
                 val nextKey = if (endOfPaginationReached) null else (page + 1)
-                Timber.tag("123456").d("page = $page prevKey = $prevKey nextKey = $nextKey")
                 val keys = moviesList.map {
                     RemoteKeys(movieId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
@@ -112,8 +103,6 @@ class MoviesListRemoteMediator @Inject constructor(
         // From that last page, get the last item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { movie ->
-                Timber.tag("123456").d("movie.id = ${movie.id} ${movie.title}")
-                Timber.tag("123456").d("state.anchorPosition = ${state.anchorPosition}")
                 // Get the remote keys of the last item retrieved
                 remoteKeysDao.remoteKeysByMovieId(movie.id)
             }

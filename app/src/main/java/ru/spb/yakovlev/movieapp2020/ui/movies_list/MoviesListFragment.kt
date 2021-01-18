@@ -21,13 +21,10 @@ import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVPagingAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
-
-    private var scrollPosition = 0
 
     private val viewModel: MoviesListViewModel by viewModels()
     private val vb by viewBinding(FragmentMoviesListBinding::bind)
@@ -42,7 +39,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun setupViews() {
-        Timber.d("123456 setupViews()")
         vb.tvPageTitle.addSystemTopPadding()
 
         vb.rvMoviesList.apply {
@@ -66,7 +62,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         }
 
         lifecycleScope.launchWhenResumed {
-            Timber.d("123456 lifecycleScope.launch()")
             viewModel.showPopularMovies().collectLatest {
                 filmsListRvAdapter.submitData(it)
             }
