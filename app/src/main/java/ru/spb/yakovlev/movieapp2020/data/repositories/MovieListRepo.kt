@@ -13,17 +13,6 @@ private const val NETWORK_PAGE_SIZE = 20
 
 interface IMovieListRepo {
     suspend fun getPopularMoviesStream(): Flow<PagingData<MovieData>>
-//TODO add following functions:
-//    suspend fun getNowPlayingMovies(language: String): List<MovieData>
-//    suspend fun getTopRatedMovies(language: String): List<MovieData>
-//    suspend fun getUpcomingMovies(language: String): List<MovieData>
-//    suspend fun getMovieDetails(language: String): List<MovieData>
-//    suspend fun searchMovie(
-//        query: String,
-//        includeAdult: Boolean = false,
-//        year: Int? = null,
-//        primaryReleaseYear: Int? = null,
-//    )
 }
 
 class MovieListRepo @Inject constructor(
@@ -39,7 +28,7 @@ class MovieListRepo @Inject constructor(
                 pageSize = NETWORK_PAGE_SIZE,
                 initialLoadSize = NETWORK_PAGE_SIZE * 2,
                 maxSize = NETWORK_PAGE_SIZE * 20,
-                        enablePlaceholders = true
+                enablePlaceholders = true
             ),
             remoteMediator = moviesListRemoteMediator,
             pagingSourceFactory = pagingSourceFactory,
