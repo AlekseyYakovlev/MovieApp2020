@@ -2,17 +2,16 @@ package ru.spb.yakovlev.movieapp2020.ui.movies_list
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.LoadState
 import coil.load
 import coil.metadata
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 import ru.spb.yakovlev.movieapp2020.Navigator
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
@@ -42,38 +41,33 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         setupViews()
     }
 
-    override fun onPause() {
-        super.onPause()
-        scrollPosition =
-            (vb.rvMoviesList.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
-        Timber.d("123456 onPause $scrollPosition")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        vb.rvMoviesList.layoutManager?.let {
-            val count = it.itemCount
-            if (count > scrollPosition) it.scrollToPosition(scrollPosition)
-            Timber.d("123456 onResume count $count  scrollPosition $scrollPosition")
-        }
-        Timber.d("123456 onResume $scrollPosition")
-    }
-
     private fun setupViews() {
         Timber.d("123456 setupViews()")
         vb.tvPageTitle.addSystemTopPadding()
 
         vb.rvMoviesList.apply {
             addSystemPadding()
-            filmsListRvAdapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+            filmsListRvAdapter.addLoadStateListener { loadState ->
+                // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+                val errorState = loadState.source.append as? LoadState.Error
+                    ?: loadState.source.prepend as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+                errorState?.let {
+                    Toast.makeText(
+                        requireContext(),
+                        "\uD83D\uDE28 Wooops ${it.error}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
             adapter = filmsListRvAdapter
             setHasFixedSize(true)
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenResumed {
             Timber.d("123456 lifecycleScope.launch()")
-            viewModel.showPopularMovies().collect {
+            viewModel.showPopularMovies().collectLatest {
                 filmsListRvAdapter.submitData(it)
             }
         }
