@@ -3,7 +3,7 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization")
     kotlin("kapt")
-    id ("dagger.hilt.android.plugin")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -17,8 +17,10 @@ android {
         applicationId = "ru.spb.yakovlev.movieapp2020"
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions.annotationProcessorOptions.argument("room.incremental", "true")
+        //javaCompileOptions.annotationProcessorOptions.argument("room.schemaLocation","$projectDir/schemas")
     }
 
     buildTypes {
@@ -65,7 +67,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation ("androidx.recyclerview:recyclerview:1.2.0-beta01")
+    implementation("androidx.recyclerview:recyclerview:1.2.0-beta01")
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
@@ -99,7 +101,7 @@ dependencies {
     //implementation ("com.squareup.okhttp3:mockwebserver:$okHttpVersion")
 
     // Paging library
-    implementation ("androidx.paging:paging-runtime:3.0.0-alpha11")
+    implementation("androidx.paging:paging-runtime:3.0.0-alpha12")
 
     // Dagger + Hilt
     val daggerVersion = "2.30.1"
@@ -110,6 +112,12 @@ dependencies {
     val androidxHilt = "1.0.0-alpha02"
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:$androidxHilt")
     kapt("androidx.hilt:hilt-compiler:$androidxHilt")
+
+    //Room
+    val roomVersion = "2.3.0-alpha04"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     //Log
     implementation("com.jakewharton.timber:timber:4.7.1")

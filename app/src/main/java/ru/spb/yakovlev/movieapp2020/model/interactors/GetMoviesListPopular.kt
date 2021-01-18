@@ -1,5 +1,6 @@
 package ru.spb.yakovlev.movieapp2020.model.interactors
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.Dispatchers
@@ -17,18 +18,21 @@ class GetMoviesListPopular @Inject constructor(
     private val movieListRepo: MovieListRepo,
 ) : IUseCase {
 
+    @OptIn(ExperimentalPagingApi::class)
     suspend fun getMoviesStream(): Flow<PagingData<MovieItemData>> {
         val genres =
             withContext(Dispatchers.IO) {
                 genresRepo.getMovieGenres()
             }
 
-        return movieListRepo.getPopularMoviesStream().map { pagingData ->
-            pagingData.map { movieData ->
-                val genresStr = genres.filter { it.id in movieData.genres }
-                    .map { it.name }
-                    .reduce { acc, genre -> "$acc, $genre" }
-                movieData.toMovieItemData(genresStr)
+        return withContext(Dispatchers.IO) {
+            movieListRepo.getPopularMoviesStream().map { pagingData ->
+                pagingData.map { movieData ->
+                    val genresStr = genres.filter { it.id in movieData.genres }
+                        .map { it.name }
+                        .reduce { acc, genre -> "$acc, $genre" }
+                    movieData.toMovieItemData(genresStr)
+                }
             }
         }
     }

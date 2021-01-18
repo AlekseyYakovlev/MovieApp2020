@@ -13,10 +13,20 @@ class MoviesListViewModel @ViewModelInject constructor(
     private val getMoviesListPopular: GetMoviesListPopular
 ) : ViewModel() {
 
+    private var popularMoviesStream : Flow<PagingData<MovieItemData>>? = null
+
     fun handleLike(movieId: Int, isLike: Boolean) {
         //TODO Fix "Like" action
     }
 
-    suspend fun showPopularMovies(): Flow<PagingData<MovieItemData>> =
-        getMoviesListPopular.getMoviesStream().cachedIn(viewModelScope)
+    suspend fun showPopularMovies(): Flow<PagingData<MovieItemData>> {
+
+        val lastResult = popularMoviesStream
+        if (lastResult != null) {
+            return lastResult
+        }
+        val newResult: Flow<PagingData<MovieItemData>> = getMoviesListPopular.getMoviesStream().cachedIn(viewModelScope)
+        popularMoviesStream = newResult
+        return newResult
+    }
 }
