@@ -52,7 +52,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                 errorState?.let {
                     Toast.makeText(
                         requireContext(),
-                        "\uD83D\uDE28 Wooops ${it.error}",
+                        "\uD83D\uDE28 Whooops ${it.error}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
