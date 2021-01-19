@@ -6,16 +6,12 @@ import ru.spb.yakovlev.movieapp2020.model.ActorData
 import ru.spb.yakovlev.movieapp2020.model.ApiSettings
 import javax.inject.Inject
 
-interface IPeopleRepo {
-    suspend fun getCastByMovieId(movieId: Int, language: String): List<ActorData>
-}
-
 class PeopleRepo @Inject constructor(
     private val network: RestService,
     private val apiSettings: ApiSettings,
-) : IPeopleRepo {
+) {
 
-    override suspend fun getCastByMovieId(movieId: Int, language: String): List<ActorData> {
+    suspend fun getCastByMovieId(movieId: Int, language: String): List<ActorData> {
         return network.getMovieCredits(
             movieId = movieId,
             language = language,
