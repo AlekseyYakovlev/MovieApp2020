@@ -9,15 +9,10 @@ import javax.inject.Inject
 @HiltAndroidApp
 class App : Application() {
 
-    @Inject
-    lateinit var monitor: NetworkMonitor
-
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
         initLogger()
-
-        monitor.registerNetworkMonitor(this)
     }
 
     private fun initLogger() {
