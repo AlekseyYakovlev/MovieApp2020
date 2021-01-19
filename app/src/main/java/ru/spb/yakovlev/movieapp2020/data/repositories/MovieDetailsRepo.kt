@@ -7,16 +7,12 @@ import ru.spb.yakovlev.movieapp2020.model.MovieDetailsData
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-interface IMovieDetailsRepo {
-    suspend fun getMoveDetailsById(movieId: Int, language: String): MovieDetailsData
-}
 
 class MovieDetailsRepo @Inject constructor(
     private val network: RestService,
     private val apiSettings: ApiSettings,
-) : IMovieDetailsRepo {
-
-    override suspend fun getMoveDetailsById(movieId: Int, language: String): MovieDetailsData {
+) {
+    suspend fun getMoveDetailsById(movieId: Int, language: String): MovieDetailsData {
         return network.getMovieDetails(
             movieId = movieId,
             language = language,

@@ -11,17 +11,13 @@ import javax.inject.Inject
 
 private const val NETWORK_PAGE_SIZE = 20
 
-interface IMovieListRepo {
-    suspend fun getPopularMoviesStream(): Flow<PagingData<MovieData>>
-}
-
 class MovieListRepo @Inject constructor(
     private val moviesListRemoteMediator: MoviesListRemoteMediator,
     private val movieDataDao: MovieDataDao,
-) : IMovieListRepo {
+) {
 
     @ExperimentalPagingApi
-    override suspend fun getPopularMoviesStream(): Flow<PagingData<MovieData>> {
+    fun getPopularMoviesStream(): Flow<PagingData<MovieData>> {
         val pagingSourceFactory = { movieDataDao.popularMovies() }
         return Pager(
             config = PagingConfig(
