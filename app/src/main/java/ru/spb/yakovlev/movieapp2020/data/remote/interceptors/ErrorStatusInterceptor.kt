@@ -23,6 +23,7 @@ class ErrorStatusInterceptor @Inject constructor(private val json: Json) : Inter
             e.message
         }
 
+        Timber.e("Error code ${response.code} $errMessage")
         when (response.code) {
             400 -> throw ApiError.BadRequest(errMessage)
             401 -> throw ApiError.Unauthorized(errMessage)
