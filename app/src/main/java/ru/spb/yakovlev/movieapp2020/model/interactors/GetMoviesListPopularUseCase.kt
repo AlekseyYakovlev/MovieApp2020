@@ -6,47 +6,45 @@ import androidx.paging.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.spb.yakovlev.movieapp2020.data.db.entities.PopularMovieDbView
 import ru.spb.yakovlev.movieapp2020.data.repositories.GenresRepo
 import ru.spb.yakovlev.movieapp2020.data.repositories.MovieListRepo
-import ru.spb.yakovlev.movieapp2020.model.MovieData
 import ru.spb.yakovlev.movieapp2020.model.MovieItemData
 import javax.inject.Inject
 
-class GetMoviesListPopular @Inject constructor(
+class GetMoviesListPopularUseCase @Inject constructor(
     private val genresRepo: GenresRepo,
     private val movieListRepo: MovieListRepo,
 ) : IUseCase {
 
     @OptIn(ExperimentalPagingApi::class)
-    suspend fun getMoviesStream(): Flow<PagingData<MovieItemData>> {
-        val genres =
-            withContext(Dispatchers.IO) {
-                genresRepo.getMovieGenres()
-            }
-
+    suspend operator fun invoke(
+        language: String,
+        country: String
+    ): Flow<PagingData<MovieItemData>> {
+        withContext(Dispatchers.IO) {
+            launch { genresRepo.loadGenres(language) }
+        }
         return withContext(Dispatchers.IO) {
-            movieListRepo.getPopularMoviesStream().map { pagingData ->
-                pagingData.map { movieData ->
-                    val genresStr = genres.filter { it.id in movieData.genres }
-                        .map { it.name }
-                        .reduce { acc, genre -> "$acc, $genre" }
-                    movieData.toMovieItemData(genresStr)
+            movieListRepo.getPopularMoviesStream(language, country).map { pagingData ->
+                pagingData.map {
+                    it.toMovieItemData()
                 }
             }
         }
     }
 
-    private fun MovieData.toMovieItemData(genresList: String) =
+    private fun PopularMovieDbView.toMovieItemData() =
         MovieItemData(
+            uid = uid,
             id = id,
             title = title,
-            genre = genresList,
-            runtime = runtime,
-            minimumAge = minimumAge,
+            genre = genre ?: "",
             voteAverage = voteAverage,
             numberOfRatings = numberOfRatings,
             poster = poster,
-            isLike = isLike,
+            isLike = isLiked,
         )
 }
