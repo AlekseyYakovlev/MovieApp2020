@@ -45,6 +45,11 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">6sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="TextView.Title" parent="TextView.TextBold">
