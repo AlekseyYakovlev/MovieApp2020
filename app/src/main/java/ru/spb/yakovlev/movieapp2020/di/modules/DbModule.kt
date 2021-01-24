@@ -7,9 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.spb.yakovlev.movieapp2020.data.db.AppDb
-import ru.spb.yakovlev.movieapp2020.data.db.MovieDataDao
-import ru.spb.yakovlev.movieapp2020.data.db.RemoteKeysDao
+import ru.spb.yakovlev.movieapp2020.data.db.*
+import ru.spb.yakovlev.movieapp2020.data.db.daos.*
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -32,15 +31,57 @@ class DbModule {
 
     @Provides
     @Singleton
-    fun providesRemoteKeysDao(
-        db: AppDb
-    ): RemoteKeysDao =
-        db.remoteKeysDao()
-
-    @Provides
-    @Singleton
     fun providesMovieDataDao(
         db: AppDb
     ): MovieDataDao =
         db.movieDataDao()
+
+    @Provides
+    @Singleton
+    fun providesGenresDao(
+        db: AppDb
+    ): GenresDao =
+        db.genresDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieGenreXRefDao(
+        db: AppDb
+    ): MovieGenreXRefsDao =
+        db.movieGenreXRefDao()
+
+    @Provides
+    @Singleton
+    fun providesPopularMoviesDao(
+        db: AppDb
+    ): PopularMoviesDao =
+        db.popularMoviesDao()
+
+    @Provides
+    @Singleton
+    fun providesFavoritesDao(
+        db: AppDb
+    ): FavoritesDao =
+        db.favoritesDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieDetailsDao(
+        db: AppDb
+    ): MovieDetailsDao =
+        db.movieDetailsDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieCertificationsDao(
+        db: AppDb
+    ): MovieCertificationsDao =
+        db.movieCertificationsDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieDetailsFullDao(
+        db: AppDb
+    ): MovieDetailsFullDao =
+        db.movieDetailsFullDao()
 }

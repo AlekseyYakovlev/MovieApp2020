@@ -67,8 +67,8 @@ object NetworkModule {
             .addInterceptor(networkStatusInterceptor)  // intercept network status
             .addInterceptor(apiKeyAuthenticator)
             // .authenticator(tokenAuthenticator)         // refresh token if response code == 401
-            .addInterceptor(httpLoggingInterceptor)    // log requests/results
             .addInterceptor(errorStatusInterceptor)    // intercept network errors
+            .addInterceptor(httpLoggingInterceptor)    // log requests/results
             .build()
 
     @Provides
