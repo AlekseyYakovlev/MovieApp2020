@@ -8,6 +8,7 @@ import dagger.hilt.android.components.ActivityComponent
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.model.Locale
 import ru.spb.yakovlev.movieapp2020.ui.RootActivity
+import timber.log.Timber
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -18,7 +19,7 @@ class ActivityModule {
     ): Locale = Locale(
         name = activity.resources.getString(R.string.app_locale),
         country = activity.resources.getString(R.string.app_default_location),
-    )
+    ).also { Timber.tag("123456789").d("Locale name = ${it.name}") }
 
     @Provides
     fun providesActivity(
