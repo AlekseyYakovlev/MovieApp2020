@@ -14,22 +14,14 @@ data class MovieReleaseDatesResponse(
     @Serializable
     data class Result(
         @SerialName("iso_3166_1")
-        val iso31661: String,
+        val country: String = "",
         @SerialName("release_dates")
-        val releaseDates: List<ReleaseDate>
+        val releaseDates: List<ReleaseDate> = emptyList()
     ) {
         @Serializable
         data class ReleaseDate(
             @SerialName("certification")
-            val certification: String,
-            @SerialName("iso_639_1")
-            val iso6391: String,
-            @SerialName("note")
-            val note: String,
-            @SerialName("release_date")
-            val releaseDate: String,
-            @SerialName("type")
-            val type: Int
+            val certification: String = "",
         )
     }
 }
