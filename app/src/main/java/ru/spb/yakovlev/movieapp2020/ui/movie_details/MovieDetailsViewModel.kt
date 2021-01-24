@@ -3,37 +3,35 @@ package ru.spb.yakovlev.movieapp2020.ui.movie_details
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.spb.yakovlev.movieapp2020.model.DataState
 import ru.spb.yakovlev.movieapp2020.model.MovieDetailsDataWithCast
-import ru.spb.yakovlev.movieapp2020.model.interactors.GetMovieDetailsState
+import ru.spb.yakovlev.movieapp2020.model.interactors.GetCertificationUseCase
+import ru.spb.yakovlev.movieapp2020.model.interactors.GetMovieDetailsStateUseCase
+import ru.spb.yakovlev.movieapp2020.model.interactors.UpdateFavoritesUseCase
 
-class MovieDetailsViewModel@ViewModelInject constructor(
-    private val getMovieDetailsState: GetMovieDetailsState
-)
-    : ViewModel() {
+class MovieDetailsViewModel @ViewModelInject constructor(
+    private val getMovieDetailsStateUseCase: GetMovieDetailsStateUseCase,
+    private val updateFavoritesUseCase: UpdateFavoritesUseCase,
+    private val getCertificationUseCase: GetCertificationUseCase,
+) : ViewModel() {
 
-    private var movieId = 0
+    suspend fun showMovieDetails(
+        movieId: Int,
+        language: String,
+    ): Flow<DataState<MovieDetailsDataWithCast>> =
+        getMovieDetailsStateUseCase(movieId, language)
 
-    val movieDetailsState: StateFlow<DataState<MovieDetailsDataWithCast>>
-        get() {
-            return when (movieId) {
-                0 -> MutableStateFlow(DataState.Empty)
-                else -> getMovieDetailsState.state
-            }
-        }
 
-    fun setMovieId(id: Int) {
-        movieId = id
-
+    fun handleLike(movieId: Int, isLike: Boolean) {
         viewModelScope.launch {
-            getMovieDetailsState.update(movieId)
+            updateFavoritesUseCase(movieId, isLike)
         }
     }
 
-    fun handleLike(isLike: Boolean) {
-        // TODO Fix handleLike
-    }
+    suspend fun getCertification(movieId: Int, country: String): String =
+        withContext(Dispatchers.IO) { getCertificationUseCase(movieId, country) }
 }

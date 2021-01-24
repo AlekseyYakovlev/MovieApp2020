@@ -2,6 +2,7 @@ package ru.spb.yakovlev.movieapp2020.ui.movie_details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,7 +11,7 @@ import coil.load
 import coil.metadata
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentActorItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieDetailsBinding
@@ -31,11 +32,10 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movieId = arguments?.getInt(ARGUMENT_TAG, 0) ?: 0
-        viewModel.setMovieId(movieId)
-        setupViews()
+        setupViews(movieId)
     }
 
-    private fun setupViews() {
+    private fun setupViews(movieId: Int) {
         vb.movieDetailsRoot.addSystemPadding()
 
         vb.btnBack.setOnClickListener {
@@ -47,12 +47,17 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             setHasFixedSize(true)
         }
 
+        val language = resources.getString(R.string.app_locale)
+        val country = resources.getString(R.string.app_default_location)
+
         lifecycleScope.launchWhenStarted {
-            viewModel.movieDetailsState.collect(::renderState)
+            viewModel.showMovieDetails(movieId, language).collectLatest {
+                renderState(it, country)
+            }
         }
     }
 
-    private fun renderState(state: DataState<MovieDetailsDataWithCast>) {
+    private fun renderState(state: DataState<MovieDetailsDataWithCast>, country: String) {
         when (state) {
             is DataState.Empty -> {
             }
@@ -63,10 +68,24 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                     vb.ivPoster.load(backdrop) {
                         placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
                     }
-                    vb.tvPg.text = minimumAge
+
+                    lifecycleScope.launchWhenResumed {
+
+                        val certification = viewModel.getCertification(id, country)
+                        if (certification.isNotBlank()) {
+                            vb.tvPg.isVisible = true
+                            vb.tvPg.text = certification
+                        } else vb.tvPg.isInvisible = true
+
+                    }
+                    if (minimumAge.isNotBlank()) {
+                        vb.tvPg.isVisible = true
+                        vb.tvPg.text = minimumAge
+                    } else vb.tvPg.isInvisible = true
+
                     vb.ivLike.apply {
                         isChecked = isLike
-                        setOnClickListener { viewModel.handleLike(!isLike) }
+                        setOnClickListener { viewModel.handleLike(state.data.id, !isLike) }
                     }
                     vb.tvTitle.text = title
                     vb.tvTags.text = genre
@@ -101,7 +120,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                 with(holder) {
                     if (itemData.photo.isNotBlank()) {
                         ivPhoto.load(itemData.photo) {
-                            placeholderMemoryCacheKey(ivPhoto.metadata?.memoryCacheKey)
+                            placeholder(R.drawable.ic_avatar_placeholder)
                         }
                     } else {
                         ivPhoto.load(R.drawable.ic_avatar_placeholder)
@@ -111,7 +130,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             },
         )
 
-    companion object{
+    companion object {
         const val ARGUMENT_TAG = "MOVIE_ID"
     }
 }

@@ -3,6 +3,7 @@ package ru.spb.yakovlev.movieapp2020.ui.movies_list
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import coil.load
 import coil.metadata
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import ru.spb.yakovlev.movieapp2020.Navigator
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
@@ -61,8 +63,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             setHasFixedSize(true)
         }
 
+        val language = resources.getString(R.string.app_locale)
+        val country = resources.getString(R.string.app_default_location)
+
         lifecycleScope.launchWhenResumed {
-            viewModel.showPopularMovies().collectLatest {
+            viewModel.showPopularMovies(language, country).collectLatest {
                 filmsListRvAdapter.submitData(it)
             }
         }
@@ -78,7 +83,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     ivPoster.load(itemData.poster) {
                         placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
                     }
-                    tvPg.text = itemData.minimumAge
+
                     ivLike.isChecked = itemData.isLike
                     ivLike.setOnClickListener {
                         viewModel.handleLike(
@@ -96,13 +101,25 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     tvHeader.text = itemData.title
                     tvTags.text = itemData.genre
 
-                    if (itemData.runtime > 0) {
-                        tvTiming.isVisible = true
-                        tvTiming.text = resources.getString(
-                            R.string.minutes,
-                            itemData.runtime
-                        )
-                    } else tvTiming.isVisible = true
+                    lifecycleScope.launchWhenResumed {
+                        launch {
+                            val certification = viewModel.getCertification(itemData.id)
+                            if (certification.isNotBlank()) {
+                                tvPg.isVisible = true
+                                tvPg.text = certification
+                            } else tvPg.isInvisible = true
+                        }
+                        launch {
+                            val runtime = viewModel.getRuntime(itemData.id)
+                            if (runtime > 0) {
+                                tvTiming.isVisible = true
+                                tvTiming.text = resources.getString(
+                                    R.string.minutes,
+                                    runtime
+                                )
+                            } else tvTiming.isInvisible = true
+                        }
+                    }
 
                     root.setOnClickListener {
                         navigator.navigateTo(
