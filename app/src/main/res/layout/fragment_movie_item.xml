@@ -80,9 +80,11 @@
         <TextView
             android:id="@+id/tv_pg"
             style="@style/TextView.PG"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/gl_start"
             app:layout_constraintTop_toTopOf="@id/gl_top"
-            tools:text="13+" />
+            tools:text="13+"
+            tools:visibility="visible" />
 
         <ru.spb.yakovlev.movieapp2020.ui.custom.CheckableImageView
             android:id="@+id/iv_like"
