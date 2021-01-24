@@ -5,10 +5,10 @@ data class MovieDetailsData (
     val title: String = "",
     val genre: String = "",
     val runtime: Int = 0,
-    val minimumAge: String = "6+",
+    val certification: String = "6+",
     val voteAverage: Float = 0f,
     val numberOfRatings: Int = 0,
     val backdrop: String = "",
-    val isLike: Boolean = false,
+    val isLiked: Boolean = false,
     val overview: String = "",
 )
