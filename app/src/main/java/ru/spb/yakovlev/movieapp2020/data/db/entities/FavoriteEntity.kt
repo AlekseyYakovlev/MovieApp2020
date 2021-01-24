@@ -3,10 +3,8 @@ package ru.spb.yakovlev.movieapp2020.data.db.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "remote_keys")
-data class RemoteKeys(
+@Entity(tableName = "favorites")
+class FavoriteEntity (
     @PrimaryKey
-    val movieId: Int,
-    val prevKey: Int?,
-    val nextKey: Int?
+    val movieId: Int = 0
 )
