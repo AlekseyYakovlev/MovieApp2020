@@ -13,10 +13,13 @@ class Navigator @Inject constructor(
     activity: RootActivity
 ) {
     private val navigationContainerId = R.id.root_container
-    private val fragmentManager = activity.supportFragmentManager
+    private val fragmentManager = activity.supportFragmentManager.also { fm->
+        fm.addOnBackStackChangedListener {
+            if (fm.backStackEntryCount == 0) activity.finish()
+        }
+    }
 
     fun navigateTo(destination: Destination, arguments: Int? = null) {
-
         val args: Bundle? = arguments?.let { argValue ->
             Bundle().apply {
                 destination.argTag?.let { argTag -> putInt(argTag, argValue) }
