@@ -35,7 +35,7 @@ class ActorsRepo @Inject constructor(
 
     private fun CreditsResponse.Cast.toActorEntity() =
         ActorEntity(
-            id = castId,
+            id = id,
             name = name,
             photo = profilePath ?: ""
         )
@@ -43,7 +43,8 @@ class ActorsRepo @Inject constructor(
     private fun CreditsResponse.Cast.toMovieActorXRef(movieId: Int) =
         MovieActorXRef(
             movieId = movieId,
-            actorId = castId,
+            actorId = id,
+            castId = castId,
         )
 
     private fun ActorEntity.toActorData() =

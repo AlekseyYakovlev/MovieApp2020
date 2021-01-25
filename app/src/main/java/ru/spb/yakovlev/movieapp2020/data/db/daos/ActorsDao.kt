@@ -19,7 +19,7 @@ interface ActorsDao {
         SELECT a.* 
         FROM actors as a, movie_actor_x_refs as ref
         WHERE ref.movieId = :movieId AND a.id = ref.actorId
-        ORDER BY ref.uid
+        ORDER BY ref.castId
         """
     )
     suspend fun getActorsByMovieId(movieId: Int): List<ActorEntity>
