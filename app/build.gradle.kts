@@ -64,7 +64,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.5.0-beta01")
+    implementation("androidx.core:core-ktx:1.5.0-beta03")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
@@ -74,10 +74,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     // Activity KTX
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha03")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha04")
 
     // Fragment KTX
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.1")
 
     // Lifecycle, ViewModel and LiveData
     val lifecycleVersion = "2.3.0"
@@ -86,7 +86,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
 
     // Coroutines
-    val coroutinesVersion = "1.4.1"
+    val coroutinesVersion = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
