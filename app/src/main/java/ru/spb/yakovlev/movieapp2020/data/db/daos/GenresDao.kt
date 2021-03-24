@@ -11,6 +11,9 @@ interface GenresDao {
     @Query("SELECT language FROM genres LIMIT 1")
     suspend fun language(): String
 
+    @Query("SELECT * FROM genres")
+    suspend fun getGenres(): List<GenreEntity>
+
     @Query("DELETE FROM genres")
     suspend fun clear()
 

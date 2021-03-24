@@ -22,4 +22,12 @@ interface MovieCertificationsDao {
 
     @Delete
     suspend fun remove(movieCertification: MovieCertification)
+
+    @Query("""
+        SELECT m.id
+        FROM movies AS m 
+        LEFT JOIN movies_certifications AS c ON m.id = c.movieId
+        WHERE c.movieId IS NULL
+    """)
+    suspend fun getMoviesIdsWithoutCertification(): List<Int>
 }

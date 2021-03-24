@@ -4,8 +4,17 @@ import androidx.room.DatabaseView
 
 @DatabaseView(
     """
-        SELECT md.id, md.title, md.genre, md.runtime, c.certification, md.voteAverage,
-            md.numberOfRatings, md.backdrop, md.overview, (f.movieId IS NOT NULL) as isLiked     
+        SELECT 
+            md.id, 
+            md.title, 
+            md.genre, 
+            md.runtime, 
+            c.certification, 
+            md.voteAverage,
+            md.numberOfRatings, 
+            md.backdrop, 
+            md.overview, 
+            (f.movieId IS NOT NULL) as isLiked     
         FROM movies_details AS md
         LEFT JOIN movies_certifications AS c on md.id = c.movieId
         LEFT JOIN favorites AS f on md.id = f.movieId
