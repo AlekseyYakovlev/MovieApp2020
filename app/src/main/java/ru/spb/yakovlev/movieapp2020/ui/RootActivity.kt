@@ -2,9 +2,11 @@ package ru.spb.yakovlev.movieapp2020.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.spb.yakovlev.movieapp2020.Navigator
 import ru.spb.yakovlev.movieapp2020.R
+import ru.spb.yakovlev.movieapp2020.background.WorkRepository
 import ru.spb.yakovlev.movieapp2020.databinding.ActivityRootBinding
 import ru.spb.yakovlev.movieapp2020.ui.util.handleLeftAndRightInsets
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
@@ -21,6 +23,9 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
         super.onCreate(savedInstanceState)
         setupNavigation(savedInstanceState == null)
         vb.rootContainer.handleLeftAndRightInsets()
+
+        val workRepository = WorkRepository()
+        WorkManager.getInstance(this).enqueue(workRepository.workRequest)
     }
 
     private fun setupNavigation(isInitial: Boolean) {
