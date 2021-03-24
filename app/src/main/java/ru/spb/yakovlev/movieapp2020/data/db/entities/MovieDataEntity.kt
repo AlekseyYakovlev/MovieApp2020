@@ -19,4 +19,5 @@ data class MovieDataEntity(
     val numberOfRatings: Int = 0,
     val poster: String = "",
     val language: String = "",
+    val page: Int = 0,
 )
