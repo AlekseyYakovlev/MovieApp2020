@@ -3,6 +3,9 @@ package ru.spb.yakovlev.movieapp2020.data.repositories
 import ru.spb.yakovlev.movieapp2020.data.db.daos.MovieCertificationsDao
 import ru.spb.yakovlev.movieapp2020.data.db.entities.MovieCertification
 import ru.spb.yakovlev.movieapp2020.data.remote.RestService
+import ru.spb.yakovlev.movieapp2020.data.remote.err.ApiError
+import ru.spb.yakovlev.movieapp2020.data.remote.err.NoNetworkError
+import ru.spb.yakovlev.movieapp2020.model.DataState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -10,14 +13,19 @@ class MovieCertificationsRepo @Inject constructor(
     private val network: RestService,
     private val movieCertificationsDao: MovieCertificationsDao,
 ) {
-    suspend fun loadCertificationForId(movieId: Int, country: String): String {
+    suspend fun loadCertificationForId(movieId: Int, country: String): DataState<String> {
         val certification = movieCertificationsDao.getCertificationById(movieId)
 
-        return if (certification?.country != country) {
-            Timber.tag("12345678")
-                .d("certification?.country = ${certification?.country} country = $country")
+        if (certification?.country != country) {
             movieCertificationsDao.removeById(movieId)
-            val cert = network.getMovieReleaseDates(movieId)
+            val movieReleaseDatesResponse = try {
+                network.getMovieReleaseDates(movieId)
+            } catch (e: ApiError) {
+                return DataState.Error(e.message)
+            } catch (e: NoNetworkError) {
+                return DataState.Error(e.message)
+            }
+            val cert = movieReleaseDatesResponse
                 .results
                 .find { it.country == country }
                 ?.let {
@@ -29,7 +37,10 @@ class MovieCertificationsRepo @Inject constructor(
                 }
             cert?.let { movieCertificationsDao.insert(it) }
 
-            cert?.certification ?: ""
-        } else certification.certification
+            return DataState.Success(cert?.certification ?: "")
+        } else return DataState.Success(certification.certification)
     }
+
+    suspend fun getMoviesIdsWithoutCertification(): List<Int> =
+        movieCertificationsDao.getMoviesIdsWithoutCertification()
 }
