@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import coil.load
+import coil.ImageLoader
+//import coil.load
 import coil.metadata
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -19,6 +22,7 @@ import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMoviesListBinding
 import ru.spb.yakovlev.movieapp2020.model.MovieItemData
+import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVPagingAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemTopPadding
@@ -35,6 +39,9 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     @Inject
     lateinit var navigator: Navigator
 
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
@@ -45,8 +52,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
         vb.rvMoviesList.apply {
             addSystemPadding()
+
             filmsListRvAdapter.addLoadStateListener { loadState ->
-                // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
                 val errorState = loadState.source.append as? LoadState.Error
                     ?: loadState.source.prepend as? LoadState.Error
                     ?: loadState.append as? LoadState.Error
@@ -58,9 +65,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+
             }
             adapter = filmsListRvAdapter
             setHasFixedSize(true)
+
         }
 
         val language = resources.getString(R.string.app_locale)
@@ -80,9 +89,15 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             },
             viewHolderBinder = { holder, itemData ->
                 with(holder) {
-                    ivPoster.load(itemData.poster) {
-                        placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
-                    }
+
+                    val request = ImageRequest.Builder(requireContext())
+                        .data(itemData.poster)
+                        .target(ivPoster)
+                        .diskCachePolicy(CachePolicy.ENABLED)
+                        .placeholderMemoryCacheKey(ivPoster.metadata?.memoryCacheKey)
+                        .build()
+                    imageLoader.enqueue(request)
+
 
                     ivLike.isChecked = itemData.isLike
                     ivLike.setOnClickListener {

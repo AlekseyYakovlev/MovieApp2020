@@ -9,15 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.metadata
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.spb.yakovlev.movieapp2020.R
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentActorItemBinding
 import ru.spb.yakovlev.movieapp2020.databinding.FragmentMovieDetailsBinding
 import ru.spb.yakovlev.movieapp2020.model.ActorItemData
-import ru.spb.yakovlev.movieapp2020.model.DataState
-import ru.spb.yakovlev.movieapp2020.model.MovieDetailsDataWithCast
 import ru.spb.yakovlev.movieapp2020.ui.base.BaseRVAdapter
 import ru.spb.yakovlev.movieapp2020.ui.util.addSystemPadding
 import ru.spb.yakovlev.movieapp2020.utils.viewbindingdelegate.viewBinding
@@ -51,62 +48,46 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         val country = resources.getString(R.string.app_default_location)
 
         lifecycleScope.launchWhenStarted {
-            viewModel.showMovieDetails(movieId, language).collectLatest {
-                renderState(it, country)
-            }
+            viewModel.showMovieDetails(movieId, language, country).collectLatest (::renderState)
         }
     }
 
-    private fun renderState(state: DataState<MovieDetailsDataWithCast>, country: String) {
-        when (state) {
-            is DataState.Empty -> {
+    private fun renderState(state: MovieDetailsScreenState) {
+        with(state) {
+            vb.ivPoster.load(poster) {
+                placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
             }
-            is DataState.Loading -> {
+
+            if (certification.isNotBlank()) {
+                vb.tvPg.isInvisible = false
+                vb.tvPg.text = certification
+            } else vb.tvPg.isInvisible = true
+
+            if (certification.isNotBlank()) {
+                vb.tvPg.isInvisible = false
+                vb.tvPg.text = certification
+            } else vb.tvPg.isInvisible = true
+
+            vb.ivLike.apply {
+                isChecked = isLike
+                setOnClickListener { viewModel.handleLike(state.id, !isLike) }
             }
-            is DataState.Success<MovieDetailsDataWithCast> -> {
-                with(state.data) {
-                    vb.ivPoster.load(backdrop) {
-                        placeholderMemoryCacheKey(vb.ivPoster.metadata?.memoryCacheKey)
-                    }
 
-                    lifecycleScope.launchWhenResumed {
+            vb.tvTitle.text = title
+            vb.tvTags.text = genre
+            vb.ratingBar.rating = voteAverage
+            vb.tvReview.text = resources.getQuantityString(
+                R.plurals.movie_details__reviews,
+                numberOfRatings,
+                numberOfRatings
+            )
+            vb.tvStorylineText.text = overview
 
-                        val certification = viewModel.getCertification(id, country)
-                        if (certification.isNotBlank()) {
-                            vb.tvPg.isVisible = true
-                            vb.tvPg.text = certification
-                        } else vb.tvPg.isInvisible = true
+            vb.tvMovieCast.isVisible = actorItemsData.isNotEmpty()
+            vb.rvActorsList.isVisible = actorItemsData.isNotEmpty()
 
-                    }
-                    if (minimumAge.isNotBlank()) {
-                        vb.tvPg.isVisible = true
-                        vb.tvPg.text = minimumAge
-                    } else vb.tvPg.isInvisible = true
-
-                    vb.ivLike.apply {
-                        isChecked = isLike
-                        setOnClickListener { viewModel.handleLike(state.data.id, !isLike) }
-                    }
-                    vb.tvTitle.text = title
-                    vb.tvTags.text = genre
-                    vb.ratingBar.rating = voteAverage
-                    vb.tvReview.text = resources.getQuantityString(
-                        R.plurals.movie_details__reviews,
-                        numberOfRatings,
-                        numberOfRatings
-                    )
-                    vb.tvStorylineText.text = overview
-
-                    vb.tvMovieCast.isVisible = actorItemsData.isNotEmpty()
-                    vb.rvActorsList.isVisible = actorItemsData.isNotEmpty()
-
-                    if (actorItemsData.isNotEmpty()) {
-                        actorsRvAdapter.updateData(actorItemsData)
-                    }
-                }
-            }
-            is DataState.Error -> {
-                Snackbar.make(vb.root, state.errorMessage, Snackbar.LENGTH_LONG).show()
+            if (actorItemsData.isNotEmpty()) {
+                actorsRvAdapter.updateData(actorItemsData)
             }
         }
     }
