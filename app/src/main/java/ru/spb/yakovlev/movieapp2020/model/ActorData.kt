@@ -5,9 +5,3 @@ data class ActorData(
     val name: String = "",
     val photo: String = "",
 )
-
-fun ActorData.toActorItemData() = ActorItemData(
-    id = id,
-    name = name,
-    photo = photo,
-)

@@ -1,28 +1,28 @@
 package ru.spb.yakovlev.movieapp2020.ui.movies_list
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import ru.spb.yakovlev.movieapp2020.model.MovieItemData
-import ru.spb.yakovlev.movieapp2020.model.interactors.GetCertificationUseCase
-import ru.spb.yakovlev.movieapp2020.model.interactors.GetMovieRuntimeUseCase
-import ru.spb.yakovlev.movieapp2020.model.interactors.GetMoviesListPopularUseCase
-import ru.spb.yakovlev.movieapp2020.model.interactors.UpdateFavoritesUseCase
+import ru.spb.yakovlev.movieapp2020.model.interactors.*
 import timber.log.Timber
+import javax.inject.Inject
 
-class MoviesListViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MoviesListViewModel @Inject constructor(
     private val getMoviesListPopularUseCase: GetMoviesListPopularUseCase,
     private val updateFavoritesUseCase: UpdateFavoritesUseCase,
     private val getCertificationUseCase: GetCertificationUseCase,
     private val getMovieRuntimeUseCase: GetMovieRuntimeUseCase,
+    private val loadGenresStateUseCase: LoadGenresStateUseCase,
 ) : ViewModel() {
     private var popularMoviesStream: Flow<PagingData<MovieItemData>>? = null
 
     private val job = SupervisorJob()
-    val handler = CoroutineExceptionHandler { _, exception ->
+    private val handler = CoroutineExceptionHandler { _, exception ->
         Timber.tag("1234567 ExceptionH").e("exception $exception")
     }
     private val scope = CoroutineScope(job + Dispatchers.IO + handler)
@@ -43,8 +43,13 @@ class MoviesListViewModel @ViewModelInject constructor(
         currentLanguage = language
         currentCountry = country
 
+        CoroutineScope(
+            scope.launch { loadGenresStateUseCase(language) }
+        )
+
         val newResult: Flow<PagingData<MovieItemData>> =
             getMoviesListPopularUseCase(language, country)
+                .flowOn(Dispatchers.IO)
                 .cachedIn(scope)
 
         popularMoviesStream = newResult
